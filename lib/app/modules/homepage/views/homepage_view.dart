@@ -1,4 +1,7 @@
-import 'package:e_commerce/app/helper/customcard.dart';
+import 'package:e_commerce/app/modules/homepage/views/add_post.dart';
+import 'package:e_commerce/app/modules/homepage/views/chart.dart';
+import 'package:e_commerce/app/modules/homepage/views/tabview.dart';
+import 'package:e_commerce/app/modules/homepage/views/setting.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -7,74 +10,52 @@ import 'package:google_fonts/google_fonts.dart';
 import '../controllers/homepage_controller.dart';
 
 class HomepageView extends GetView<HomepageController> {
+  @override
   final HomepageController controller = Get.put(HomepageController());
 
   HomepageView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        bottom: TabBar(
-            indicatorColor: Colors.red,
-            labelColor: Colors.black,
-            controller: controller.tabController,
-            tabs: const [
-              Tab(
-                text: 'WOMEN',
-              ),
-              Tab(
-                text: 'MEN',
-              ),
-              Tab(
-                text: 'CHILDREN',
-              )
-            ]),
-        title: const Text(
-          'Discovery',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search, color: Colors.black),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.shopping_cart, color: Colors.black),
-          ),
-        ],
-      ),
-      body: TabBarView(
-        controller: controller.tabController,
-        children: [
-          ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-            children: <Widget>[
-              CustomCard(
-                  profileImage: 'assets/ichlasul.png',
-                  title: 'Ichlasul Amal Pangestu',
-                  subtitle: 'Backend Developer',
-                  description:
-                      'Lorem Ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam id rhoncus luctus, nisl quam aliquam nunc, vitae aliquam nisl nunc vitae nisl. Sed euismod, diam id rhoncus luctus, nisl quam aliquam nunc, vitae aliquam nisl nunc vitae nisl.',
-                  image: 'assets/suit-ichlasul.jpg'),
-            ],
-          ),
-          ListView(
+        body: SizedBox.expand(
+          child: PageView(
+            physics:
+                const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
+            controller: controller.pageController,
             children: [
-              CustomCard(
-                  profileImage: 'assets/ichlasul.png',
-                  title: 'Ichlasul Amal Pangestu',
-                  subtitle: 'Backend Developer',
-                  description:
-                      'Lorem Ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam id rhoncus luctus, nisl quam aliquam nunc, vitae aliquam nisl nunc vitae nisl. Sed euismod, diam id rhoncus luctus, nisl quam aliquam nunc, vitae aliquam nisl nunc vitae nisl.',
-                  image: 'assets/suit-ichlasul.jpg'),
+              MyTabView(),
+              const MyChartPage(),
+              const MySettingPage(),
+              const AddPage(),
             ],
           ),
-          const Icon(Icons.directions_bike),
-        ],
-      ),
-    );
+        ),
+        bottomNavigationBar: Obx(() => BottomNavigationBar(
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_bag_outlined),
+                  label: 'Checkout',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings),
+                  label: 'Setting',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.add),
+                  label: 'Add',
+                ),
+              ],
+              currentIndex: controller.selectedIndex.value,
+              selectedItemColor: Colors.red,
+              unselectedItemColor: Colors.black,
+              unselectedLabelStyle: GoogleFonts.raleway(color: Colors.black),
+              selectedLabelStyle: GoogleFonts.raleway(color: Colors.red),
+              onTap: controller.onItemTapped,
+              showUnselectedLabels: true,
+            )));
   }
 }

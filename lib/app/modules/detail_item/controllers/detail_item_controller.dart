@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomepageController extends GetxController
+class DetailItemController extends GetxController
     with SingleGetTickerProviderMixin {
+  final Rx<Color> selectedColor = Colors.red.obs;
   late TabController tabController;
-  late PageController pageController;
-
-  GlobalKey bottomNavigationKey = GlobalKey();
-  RxInt selectedIndex = 0.obs;
-
-  void onItemTapped(int index) {
-    selectedIndex.value = index;
-    pageController.jumpToPage(index);
-
-    update();
-  }
+  final RxInt quantity = 1.obs;
 
   @override
   void onInit() {
-    super.onInit();
     tabController = TabController(length: 3, vsync: this);
-    pageController = PageController();
+    super.onInit();
   }
 
   @override
@@ -31,7 +21,6 @@ class HomepageController extends GetxController
   @override
   void onClose() {
     tabController.dispose();
-    pageController.dispose();
     super.onClose();
   }
 }
