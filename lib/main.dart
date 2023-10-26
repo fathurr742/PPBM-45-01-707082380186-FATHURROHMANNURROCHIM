@@ -28,7 +28,7 @@ void main() {
         ),
         duration: const Duration(milliseconds: 1500),
         animationDuration: const Duration(milliseconds: 1000),
-        nextScreen: DetailItemView(),
+        nextScreen: HomepageView(),
       ),
     ),
   );

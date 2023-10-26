@@ -5,8 +5,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final List<Widget>? actionbar;
   final TabBar? tabBar;
+  final double? heigh;
 
-  const CustomAppBar({super.key, this.title, this.actionbar, this.tabBar});
+  const CustomAppBar(
+      {super.key, this.title, this.actionbar, this.tabBar, this.heigh});
 
   @override
   Widget build(BuildContext context) {
@@ -26,5 +28,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 0);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + heigh!);
 }

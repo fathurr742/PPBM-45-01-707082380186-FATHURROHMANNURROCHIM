@@ -17,6 +17,7 @@ class DetailItemView extends GetView<DetailItemController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+        heigh: 0,
         title: '',
         actionbar: [
           IconButton(
@@ -103,7 +104,7 @@ class DetailItemView extends GetView<DetailItemController> {
               const SizedBox(height: 10),
               SingleChildScrollView(
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.55,
                   child: TabBarView(
                     controller: controller.tabController,
                     children: [

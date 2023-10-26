@@ -15,6 +15,7 @@ class MyTabView extends GetView<HomepageController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
+          heigh: 48,
           title: 'Discovery',
           actionbar: [
             IconButton(

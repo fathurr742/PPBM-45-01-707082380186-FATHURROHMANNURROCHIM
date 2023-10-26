@@ -1,5 +1,7 @@
+import 'package:e_commerce/app/modules/detail_item/views/detail_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class CustomCard extends StatelessWidget {
@@ -15,7 +17,9 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.to(() => DetailItemView());
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
