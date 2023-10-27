@@ -16,6 +16,8 @@ dependencies:
   another_flutter_splash_screen: ^1.2.0
   fancy_bottom_navigation: ^0.3.3
   flutter_image_slideshow: ^0.1.6
+  mysql1: ^0.20.0
+  widget_visibility_detector: ^1.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

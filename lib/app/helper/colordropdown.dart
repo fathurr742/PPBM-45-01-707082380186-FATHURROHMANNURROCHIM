@@ -9,7 +9,7 @@ class ColorDropdown extends GetView<DetailItemController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SizedBox(
-          width: 110,
+          width: 120,
           child: DropdownButtonFormField<Color>(
             isExpanded: true,
             value: controller.selectedColor.value,
