@@ -1,3 +1,4 @@
+import 'package:e_commerce/app/modules/checkoutpage/views/checkoutpage_view.dart';
 import 'package:e_commerce/app/modules/homepage/views/add_post.dart';
 import 'package:e_commerce/app/modules/homepage/views/chart.dart';
 import 'package:e_commerce/app/modules/homepage/views/tabview.dart';
@@ -24,7 +25,7 @@ class HomepageView extends GetView<HomepageController> {
             controller: controller.pageController,
             children: [
               MyTabView(),
-              const MyChartPage(),
+              CheckoutpageView(),
               const MySettingPage(),
               const AddPage(),
             ],

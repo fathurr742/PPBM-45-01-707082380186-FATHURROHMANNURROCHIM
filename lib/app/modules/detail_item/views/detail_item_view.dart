@@ -189,6 +189,7 @@ class DetailItemView extends GetView<DetailItemController> {
                       height: 5,
                     ),
                     TextFormField(
+                      controller: controller.waist,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(8),
@@ -216,6 +217,7 @@ class DetailItemView extends GetView<DetailItemController> {
                       height: 5,
                     ),
                     TextFormField(
+                      controller: controller.length,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(8),
@@ -243,6 +245,7 @@ class DetailItemView extends GetView<DetailItemController> {
                       height: 5,
                     ),
                     TextFormField(
+                      controller: controller.breadth,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(8),
@@ -291,7 +294,9 @@ class DetailItemView extends GetView<DetailItemController> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  controller.insertData();
+                },
                 child: Text(
                   'Rp 100.000',
                   style: GoogleFonts.raleway(

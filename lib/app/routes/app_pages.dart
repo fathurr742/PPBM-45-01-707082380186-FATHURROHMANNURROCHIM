@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/checkoutpage/bindings/checkoutpage_binding.dart';
+import '../modules/checkoutpage/views/checkoutpage_view.dart';
 import '../modules/detail_item/bindings/detail_item_binding.dart';
 import '../modules/detail_item/views/detail_item_view.dart';
 import '../modules/homepage/bindings/homepage_binding.dart';
@@ -29,6 +31,11 @@ class AppPages {
       name: _Paths.DETAIL_ITEM,
       page: () => DetailItemView(),
       binding: DetailItemBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKOUTPAGE,
+      page: () => const CheckoutpageView(),
+      binding: CheckoutpageBinding(),
     ),
   ];
 }
