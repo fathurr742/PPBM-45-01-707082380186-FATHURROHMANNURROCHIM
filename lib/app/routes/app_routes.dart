@@ -8,6 +8,10 @@ abstract class Routes {
   static const HOMEPAGE = _Paths.HOMEPAGE;
   static const DETAIL_ITEM = _Paths.DETAIL_ITEM;
   static const CHECKOUTPAGE = _Paths.CHECKOUTPAGE;
+<<<<<<< HEAD
+  static const ADD_ITEM = _Paths.ADD_ITEM;
+=======
+>>>>>>> FATHURROHMANNURROCHIM
 }
 
 abstract class _Paths {
@@ -17,4 +21,8 @@ abstract class _Paths {
   static const HOMEPAGE = '/homepage';
   static const DETAIL_ITEM = '/detail-item';
   static const CHECKOUTPAGE = '/checkoutpage';
+<<<<<<< HEAD
+  static const ADD_ITEM = '/add-item';
+=======
+>>>>>>> FATHURROHMANNURROCHIM
 }
