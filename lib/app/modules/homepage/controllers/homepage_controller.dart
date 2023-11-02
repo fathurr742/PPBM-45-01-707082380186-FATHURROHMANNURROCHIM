@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomepageController extends GetxController
-    with SingleGetTickerProviderMixin {
+    // ignore: deprecated_member_use
+    with
+        SingleGetTickerProviderMixin {
   late TabController tabController;
   late PageController pageController;
 
@@ -21,11 +23,6 @@ class HomepageController extends GetxController
     super.onInit();
     tabController = TabController(length: 3, vsync: this);
     pageController = PageController();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
   }
 
   @override

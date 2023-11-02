@@ -1,10 +1,8 @@
 import 'package:get/get.dart';
 
-<<<<<<< HEAD
 import '../modules/addItem/bindings/add_item_binding.dart';
 import '../modules/addItem/views/add_item_view.dart';
-=======
->>>>>>> FATHURROHMANNURROCHIM
+
 import '../modules/checkoutpage/bindings/checkoutpage_binding.dart';
 import '../modules/checkoutpage/views/checkoutpage_view.dart';
 import '../modules/detail_item/bindings/detail_item_binding.dart';
@@ -19,6 +17,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
+  // ignore: constant_identifier_names
   static const INITIAL = Routes.INTRODUCTION;
 
   static final routes = [
@@ -39,7 +38,6 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.CHECKOUTPAGE,
-<<<<<<< HEAD
       page: () => CheckoutpageView(),
       binding: CheckoutpageBinding(),
     ),
@@ -48,10 +46,5 @@ class AppPages {
       page: () => AddItemView(),
       binding: AddItemBinding(),
     ),
-=======
-      page: () => const CheckoutpageView(),
-      binding: CheckoutpageBinding(),
-    ),
->>>>>>> FATHURROHMANNURROCHIM
   ];
 }

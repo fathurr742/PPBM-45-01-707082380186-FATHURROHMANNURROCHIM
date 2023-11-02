@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../controllers/add_item_controller.dart';
 
 class AddItemView extends GetView<AddItemController> {
+  @override
   final AddItemController controller = Get.put(AddItemController());
 
   AddItemView({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class AddItemView extends GetView<AddItemController> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: CustomAppBar(heigh: 0, title: 'Add Item'),
+      appBar: const CustomAppBar(heigh: 0, title: 'Add Item'),
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height * 0.8,
@@ -30,12 +31,12 @@ class AddItemView extends GetView<AddItemController> {
               ],
             ),
           ),
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Obx(
             () => Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 20),
+                  margin: const EdgeInsets.only(bottom: 20),
                   height: 130, // Add this line
                   width: 130, // Add this line
                   decoration: BoxDecoration(
@@ -55,7 +56,7 @@ class AddItemView extends GetView<AddItemController> {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.camera_alt,
                             color: Colors.grey,
                           ),
@@ -71,7 +72,7 @@ class AddItemView extends GetView<AddItemController> {
                         BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
                             blurRadius: 10,
-                            offset: Offset(0, 3))
+                            offset: const Offset(0, 3))
                       ]),
                   child: Form(
                     key: controller.formKey,
@@ -102,7 +103,7 @@ class AddItemView extends GetView<AddItemController> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           TextFormField(
@@ -124,7 +125,7 @@ class AddItemView extends GetView<AddItemController> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           TextFormField(
@@ -161,14 +162,14 @@ class AddItemView extends GetView<AddItemController> {
                               onPressed: () {
                                 controller.pickImage();
                               },
-                              child: Text('Upload Image')),
+                              child: const Text('Upload Image')),
                           const SizedBox(
                             height: 10,
                           ),
                           ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.pink,
-                                minimumSize: Size(300, 50),
+                                minimumSize: const Size(300, 50),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -179,7 +180,7 @@ class AddItemView extends GetView<AddItemController> {
                                   controller.addItem();
                                 }
                               },
-                              child: Text('Add Item')),
+                              child: const Text('Add Item')),
                         ],
                       ),
                     ),

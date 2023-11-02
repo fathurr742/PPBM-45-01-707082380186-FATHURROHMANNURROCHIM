@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:mysql1/mysql1.dart';
 
 class DetailItemController extends GetxController
-    with SingleGetTickerProviderMixin {
+    // ignore: deprecated_member_use
+    with
+        SingleGetTickerProviderMixin {
   late TextEditingController waist;
   late TextEditingController length;
   late TextEditingController breadth;
@@ -33,7 +35,7 @@ class DetailItemController extends GetxController
   }
 
   Future<void> insertData() async {
-    final nama_barang = "PERFECT BLUE SUIT";
+    const namaBarang = "PERFECT BLUE SUIT";
     final waistValue = waist.text;
     final lengthValue = length.text;
     final breadthValue = breadth.text;
@@ -43,7 +45,7 @@ class DetailItemController extends GetxController
     final result = await conn.query(
       'INSERT INTO tb_barang (nama_barang, waist, length, breadth, color, quantity) VALUES (?, ?, ?, ?, ?, ?)',
       [
-        nama_barang,
+        namaBarang,
         waistValue,
         lengthValue,
         breadthValue,
@@ -52,7 +54,11 @@ class DetailItemController extends GetxController
       ],
     );
 
-    print('Inserted ${result.affectedRows} row(s)');
+    if (result.affectedRows == 1) {
+      Get.snackbar('Berhasil', 'Data ditambahkan');
+    } else {
+      Get.snackbar('Error', 'Data gagal ditambahkan');
+    }
   }
 
   @override

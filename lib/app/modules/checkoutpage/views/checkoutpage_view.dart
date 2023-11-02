@@ -13,13 +13,13 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         heigh: 0,
         title: 'Checkout',
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (controller.hasError.value) {
           return Center(child: Text('Error: ${controller.errorMessage.value}'));
         } else {

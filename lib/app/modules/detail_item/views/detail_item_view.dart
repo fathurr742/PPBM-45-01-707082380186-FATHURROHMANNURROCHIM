@@ -271,7 +271,7 @@ class DetailItemView extends GetView<DetailItemController> {
           const SizedBox(height: 10),
           ColorDropdown(),
           const SizedBox(height: 20),
-          Text(
+          const Text(
             'Quantity',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
@@ -282,7 +282,7 @@ class DetailItemView extends GetView<DetailItemController> {
             color: Colors.grey,
             thickness: 0.6,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Center(

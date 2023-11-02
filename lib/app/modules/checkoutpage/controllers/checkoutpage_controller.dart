@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -71,7 +70,8 @@ class CheckoutpageController extends GetxController {
 
     try {
       await conn.query('DELETE FROM tb_barang WHERE id = ?', [id]);
-      items.removeWhere((item) => item.id == id /* where this id get data from?*/);
+      items.removeWhere(
+          (item) => item.id == id /* where this id get data from?*/);
     } catch (e) {
       print(e);
     } finally {

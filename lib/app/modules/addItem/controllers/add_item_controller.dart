@@ -23,7 +23,7 @@ class AddItemController extends GetxController {
   }
 
   Future<void> addItem() async {
-    final nama_barang = titleController.text;
+    final namaBarang = titleController.text;
     final description = descriptionController.text;
     final price = priceController.text;
     final imageValue = image.value;
@@ -40,7 +40,7 @@ class AddItemController extends GetxController {
       final result = await conn.query(
         'INSERT INTO tb_barang (nama_barang, description, price, image) VALUES (?, ?, ?, ?)',
         [
-          nama_barang,
+          namaBarang,
           description,
           price,
           imageValue.toString(),
@@ -66,11 +66,6 @@ class AddItemController extends GetxController {
     priceController = TextEditingController();
 
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
   }
 
   @override

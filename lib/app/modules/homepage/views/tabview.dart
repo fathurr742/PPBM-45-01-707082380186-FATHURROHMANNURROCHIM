@@ -3,7 +3,6 @@ import 'package:e_commerce/app/helper/customcard.dart';
 import 'package:e_commerce/app/modules/homepage/controllers/homepage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MyTabView extends GetView<HomepageController> {
   @override

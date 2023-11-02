@@ -10,7 +10,7 @@ class MyChartPage extends StatefulWidget {
 class _MyChartPageState extends State<MyChartPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Text('Chart Page'),
       ),

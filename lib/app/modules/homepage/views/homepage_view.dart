@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 import 'package:e_commerce/app/modules/addItem/views/add_item_view.dart';
 import 'package:e_commerce/app/modules/checkoutpage/views/checkoutpage_view.dart';
 
-=======
-import 'package:e_commerce/app/modules/checkoutpage/views/checkoutpage_view.dart';
-import 'package:e_commerce/app/modules/homepage/views/add_post.dart';
->>>>>>> FATHURROHMANNURROCHIM
 import 'package:e_commerce/app/modules/homepage/views/chart.dart';
 import 'package:e_commerce/app/modules/homepage/views/tabview.dart';
 import 'package:e_commerce/app/modules/homepage/views/setting.dart';

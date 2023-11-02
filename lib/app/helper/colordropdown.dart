@@ -6,6 +6,8 @@ class ColorDropdown extends GetView<DetailItemController> {
   @override
   final DetailItemController controller = Get.put(DetailItemController());
 
+  ColorDropdown({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => SizedBox(
@@ -36,7 +38,7 @@ class ColorDropdown extends GetView<DetailItemController> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text('Red')
+                    const Text('Red')
                   ],
                 ),
               ),
@@ -49,10 +51,10 @@ class ColorDropdown extends GetView<DetailItemController> {
                       height: 20,
                       color: Colors.blue,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Text('Blue')
+                    const Text('Blue')
                   ],
                 ),
               ),
@@ -68,7 +70,7 @@ class ColorDropdown extends GetView<DetailItemController> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text('Green'),
+                    const Text('Green'),
                   ],
                 ),
               ),

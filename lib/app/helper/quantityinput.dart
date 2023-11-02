@@ -3,7 +3,10 @@ import 'package:get/get.dart';
 import 'package:e_commerce/app/modules/detail_item/controllers/detail_item_controller.dart';
 
 class QuantityInput extends GetView<DetailItemController> {
+  @override
   final DetailItemController controller = Get.put(DetailItemController());
+
+  QuantityInput({super.key});
 
   @override
   Widget build(BuildContext context) {
