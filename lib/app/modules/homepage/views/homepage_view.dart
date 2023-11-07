@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:e_commerce/app/modules/addItem/views/add_item_view.dart';
 import 'package:e_commerce/app/modules/checkoutpage/views/checkoutpage_view.dart';
 

@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:e_commerce/app/data/barang_model.dart';
 import 'package:e_commerce/app/modules/detail_item/views/detail_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,20 +8,24 @@ import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class CustomCard extends StatelessWidget {
-  String? profileImage, title, subtitle, description, image;
+  String? profileImage, title, subtitle, description;
+  Uint8List image;
+  final BarangModel dataBarang;
+
   CustomCard(
       {super.key,
       required this.profileImage,
       required this.title,
       required this.subtitle,
       required this.description,
-      required this.image});
+      required this.image,
+      required this.dataBarang});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => DetailItemView());
+        Get.to(() => DetailItemView(), arguments: dataBarang);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -112,16 +119,12 @@ class CustomCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Image.asset(
-                          image!,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Expanded(
-                        child: Image.asset(
-                          image!,
-                          fit: BoxFit.cover,
-                        ),
+                        child: image.isNotEmpty
+                            ? Image(
+                                image: MemoryImage(image),
+                                fit: BoxFit.cover,
+                              )
+                            : Container(),
                       ),
                     ],
                   ),

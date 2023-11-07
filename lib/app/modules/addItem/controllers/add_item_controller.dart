@@ -1,9 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:mysql1/mysql1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mysql1/mysql1.dart';
 
 class AddItemController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -11,12 +11,14 @@ class AddItemController extends GetxController {
   late TextEditingController descriptionController;
   late TextEditingController priceController;
   Rxn<File> image = Rxn<File>();
+  String? base64Image;
 
   Future<void> pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       image.value = File(pickedFile.path);
+      base64Image = base64Encode(await image.value!.readAsBytes());
     } else {
       print('No image selected.');
     }
@@ -26,15 +28,16 @@ class AddItemController extends GetxController {
     final namaBarang = titleController.text;
     final description = descriptionController.text;
     final price = priceController.text;
-    final imageValue = image.value;
 
-    final conn = await MySqlConnection.connect(ConnectionSettings(
-      host: '192.168.137.1',
-      port: 3306,
-      user: 'flutter',
-      password: 'malammakan',
-      db: 'latihan_flutter',
-    ));
+    final conn = await MySqlConnection.connect(
+      ConnectionSettings(
+        host: '192.168.137.1',
+        port: 3306,
+        user: 'flutter',
+        password: 'malammakan',
+        db: 'latihan_flutter',
+      ),
+    );
 
     try {
       final result = await conn.query(
@@ -43,19 +46,23 @@ class AddItemController extends GetxController {
           namaBarang,
           description,
           price,
-          imageValue.toString(),
+          base64Image,
         ],
       );
 
-      if (result.affectedRows == 1) {
-        Get.snackbar('Berhasil', 'Data ditambahkan');
+      if (result.affectedRows != 0) {
+        Get.snackbar(
+            backgroundColor: Colors.pink,
+            colorText: Colors.white,
+            'Berhasil',
+            'Data ditambahkan');
       } else {
         Get.snackbar('Error', 'Data gagal ditambahkan');
       }
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
-      conn.close();
+      await conn.close();
     }
   }
 

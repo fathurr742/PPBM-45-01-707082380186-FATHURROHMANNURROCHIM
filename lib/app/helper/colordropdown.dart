@@ -12,7 +12,7 @@ class ColorDropdown extends GetView<DetailItemController> {
   Widget build(BuildContext context) {
     return Obx(() => SizedBox(
           width: 120,
-          child: DropdownButtonFormField<Color>(
+          child: DropdownButtonFormField<String>(
             isExpanded: true,
             value: controller.selectedColor.value,
             decoration: InputDecoration(
@@ -25,54 +25,18 @@ class ColorDropdown extends GetView<DetailItemController> {
             onChanged: (color) {
               controller.selectedColor.value = color!;
             },
-            items: [
+            items: const [
               DropdownMenuItem(
-                value: Colors.red,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      color: Colors.red,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text('Red')
-                  ],
-                ),
+                value: 'Red',
+                child: Text('Red'),
               ),
               DropdownMenuItem(
-                value: Colors.blue,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      color: Colors.blue,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text('Blue')
-                  ],
-                ),
+                value: 'Blue',
+                child: Text('Blue'),
               ),
               DropdownMenuItem(
-                value: Colors.green,
-                child: Row(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      color: Colors.green,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text('Green'),
-                  ],
-                ),
+                value: 'Green',
+                child: Text('Green'),
               ),
             ],
           ),

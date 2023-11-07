@@ -19,6 +19,10 @@ dependencies:
   widget_visibility_detector: ^1.0.1
   image_picker: ^1.0.4
   mysql1: ^0.20.0
+  permission_handler: ^11.0.1
+  image_picker_for_web: ^3.0.1
+  path_provider: ^2.1.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

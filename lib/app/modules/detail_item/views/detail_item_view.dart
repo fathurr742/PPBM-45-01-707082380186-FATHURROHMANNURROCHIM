@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:intl/intl.dart';
+import 'package:e_commerce/app/data/barang_model.dart';
 import 'package:e_commerce/app/helper/colordropdown.dart';
 import 'package:e_commerce/app/helper/customappbar.dart';
 import 'package:e_commerce/app/helper/quantityinput.dart';
@@ -9,10 +13,12 @@ import 'package:google_fonts/google_fonts.dart';
 import '../controllers/detail_item_controller.dart';
 
 class DetailItemView extends GetView<DetailItemController> {
+  final BarangModel dataBarang;
+
   @override
   final DetailItemController controller = Get.put(DetailItemController());
 
-  DetailItemView({Key? key}) : super(key: key);
+  DetailItemView({super.key}) : dataBarang = Get.arguments as BarangModel;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +43,7 @@ class DetailItemView extends GetView<DetailItemController> {
   }
 
   Widget imageSlider() {
+    Uint8List imageBytes = base64Decode(dataBarang.imageBase64!);
     return ImageSlideshow(
       width: double.infinity,
       height: 300,
@@ -45,16 +52,16 @@ class DetailItemView extends GetView<DetailItemController> {
       isLoop: true,
       indicatorBackgroundColor: Colors.grey,
       children: [
-        Image.asset(
-          'assets/suit-ichlasul.jpg',
+        Image.memory(
+          imageBytes,
           fit: BoxFit.cover,
         ),
-        Image.asset(
-          'assets/suit-ichlasul.jpg',
+        Image.memory(
+          imageBytes,
           fit: BoxFit.cover,
         ),
-        Image.asset(
-          'assets/suit-ichlasul.jpg',
+        Image.memory(
+          imageBytes,
           fit: BoxFit.cover,
         ),
       ],
@@ -62,6 +69,8 @@ class DetailItemView extends GetView<DetailItemController> {
   }
 
   Widget bottomBody(BuildContext context) {
+    final formatCurrency = NumberFormat.simpleCurrency(locale: 'id_ID');
+    String price = formatCurrency.format(dataBarang.price);
     return Column(
       children: [
         Container(
@@ -71,14 +80,14 @@ class DetailItemView extends GetView<DetailItemController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'PERFECT BLUE SUIT IN RANDOM GUY',
+                dataBarang.namaBarang!,
                 style: GoogleFonts.raleway(fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 10,
               ),
               Text(
-                'Rp. 100.000.-',
+                price,
                 style: GoogleFonts.raleway(
                     color: Colors.pink, fontWeight: FontWeight.bold),
               ),
@@ -137,7 +146,7 @@ class DetailItemView extends GetView<DetailItemController> {
               height: 10,
             ),
             Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sit amet ante erat. Maecenas vel tortor eu arcu consequat ultrices eget at mi. Nunc in purus neque. Nam consequat vitae nisl sed varius. Morbi ornare, nisi vitae tincidunt fringilla, lorem urna congue leo, non congue leo dui eget orci. Etiam sed scelerisque dolor. Ut eget faucibus nunc, a aliquet ligula. Cras pretium commodo nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Pellentesque sit amet est metus. In sagittis blandit massa vitae eleifend. Curabitur lacinia interdum imperdiet. Sed quis tempus neque. Pellentesque ornare consectetur dui, et molestie elit. Sed efficitur odio et molestie blandit. Aenean nec purus pretium tortor sagittis faucibus.',
+              dataBarang.description!,
               style: GoogleFonts.raleway(
                 height: 1.5,
                 fontSize: 12,
@@ -168,6 +177,8 @@ class DetailItemView extends GetView<DetailItemController> {
   }
 
   Widget measurements() {
+    final formatCurrency = NumberFormat.simpleCurrency(locale: 'id_ID');
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -286,24 +297,29 @@ class DetailItemView extends GetView<DetailItemController> {
             height: 10,
           ),
           Center(
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(230, 50),
-                  backgroundColor: Colors.pink,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+            child: Obx(() {
+              int totalPrice =
+                  controller.quantity.value * (dataBarang.price ?? 0);
+              return ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(230, 50),
+                    backgroundColor: Colors.pink,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  controller.insertData();
-                },
-                child: Text(
-                  'Rp 100.000',
-                  style: GoogleFonts.raleway(
+                  onPressed: () {
+                    controller.insertData(totalPrice, dataBarang.namaBarang!);
+                  },
+                  child: Text(
+                    formatCurrency.format(totalPrice),
+                    style: GoogleFonts.raleway(
                       color: Colors.white,
                       fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                )),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ));
+            }),
           )
         ],
       ),

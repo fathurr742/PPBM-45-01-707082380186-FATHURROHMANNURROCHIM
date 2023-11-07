@@ -1,3 +1,4 @@
+import 'package:e_commerce/app/data/checkout_model.dart';
 import 'package:get/get.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -15,7 +16,7 @@ class BarangModel {
 }
 
 class CheckoutpageController extends GetxController {
-  final items = <BarangModel>[].obs;
+  final items = <CheckoutModel>[].obs;
   final isLoading = false.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
@@ -36,17 +37,22 @@ class CheckoutpageController extends GetxController {
     ));
 
     try {
-      final results = await conn
-          .query('SELECT id, nama_barang, color, quantity FROM tb_barang');
+      final results = await conn.query(
+          'SELECT id, nama_barang, color, quantity, total_harga FROM tb_order');
 
       final data = results.map((row) {
         final id = row['id'] as int;
         final namaBarang = row['nama_barang'] as String;
         final color = row['color'] as String;
         final quantity = row['quantity'] as int;
+        final total_harga = row['total_harga'] as int;
 
-        return BarangModel(
-            id: id, namaBarang: namaBarang, color: color, quantity: quantity);
+        return CheckoutModel(
+            id: id,
+            namaBarang: namaBarang,
+            color: color,
+            quantity: quantity,
+            total_harga: total_harga);
       }).toList();
 
       items.assignAll(data);

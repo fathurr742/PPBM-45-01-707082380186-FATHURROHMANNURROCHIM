@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../controllers/introduction_controller.dart';
 
 class IntroductionView extends GetView<IntroductionController> {
-  IntroductionView({Key? key}) : super(key: key);
+  const IntroductionView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

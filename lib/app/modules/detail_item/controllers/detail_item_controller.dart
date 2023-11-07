@@ -10,7 +10,7 @@ class DetailItemController extends GetxController
   late TextEditingController length;
   late TextEditingController breadth;
 
-  final Rx<Color> selectedColor = Colors.red.obs;
+  var selectedColor = 'Red'.obs;
   late TabController tabController;
   final RxInt quantity = 1.obs;
 
@@ -34,31 +34,65 @@ class DetailItemController extends GetxController
     super.onInit();
   }
 
-  Future<void> insertData() async {
-    const namaBarang = "PERFECT BLUE SUIT";
+  Future<void> insertData(int total_harga, String namaBarang) async {
     final waistValue = waist.text;
     final lengthValue = length.text;
     final breadthValue = breadth.text;
     final selectedColorValue = selectedColor.value;
     final quantityValue = quantity.value;
 
-    final result = await conn.query(
-      'INSERT INTO tb_barang (nama_barang, waist, length, breadth, color, quantity) VALUES (?, ?, ?, ?, ?, ?)',
-      [
-        namaBarang,
-        waistValue,
-        lengthValue,
-        breadthValue,
-        selectedColorValue.toString(),
-        quantityValue
-      ],
-    );
+    Get.dialog(
+      Theme(
+        data: ThemeData(dialogBackgroundColor: Colors.pink),
+        child: AlertDialog(
+          title: Text('Confirm Order', style: TextStyle(color: Colors.white)),
+          content: Text('Are you sure you want to place this order?',
+              style: TextStyle(color: Colors.white)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel', style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                Get.back(result: false);
+              },
+            ),
+            TextButton(
+              child: Text('Confirm', style: TextStyle(color: Colors.white)),
+              onPressed: () async {
+                Get.back(closeOverlays: true);
 
-    if (result.affectedRows == 1) {
-      Get.snackbar('Berhasil', 'Data ditambahkan');
-    } else {
-      Get.snackbar('Error', 'Data gagal ditambahkan');
-    }
+                final result = await conn.query(
+                  'INSERT INTO tb_order (nama_barang, waist, length, breadth, color, quantity, total_harga) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                  [
+                    namaBarang,
+                    waistValue,
+                    lengthValue,
+                    breadthValue,
+                    selectedColorValue,
+                    quantityValue,
+                    total_harga
+                  ],
+                );
+
+                if (result.affectedRows == 1) {
+                  Get.snackbar(
+                      backgroundColor: Colors.pink,
+                      colorText: Colors.white,
+                      'Success',
+                      'Item successfully added to cart');
+                } else {
+                  Get.snackbar('Error', 'Data gagal ditambahkan');
+                }
+
+                // Show Snackbar and navigate to homepage here
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override

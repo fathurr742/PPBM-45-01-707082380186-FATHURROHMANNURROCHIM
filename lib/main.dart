@@ -17,8 +17,10 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
+
   runApp(
     GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "I-TAILOR",
       home: FlutterSplashScreen.scale(
         backgroundColor: Colors.pink,

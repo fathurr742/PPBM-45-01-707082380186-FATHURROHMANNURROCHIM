@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:e_commerce/app/helper/customappbar.dart';
 import 'package:e_commerce/app/helper/customcard.dart';
 import 'package:e_commerce/app/modules/homepage/controllers/homepage_controller.dart';
@@ -42,34 +45,32 @@ class MyTabView extends GetView<HomepageController> {
                 )
               ]),
         ),
-        body: TabBarView(
-          controller: controller.tabController,
-          children: [
-            ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              children: <Widget>[
-                CustomCard(
-                    profileImage: 'assets/ichlasul.png',
-                    title: 'Ichlasul Amal Pangestu',
-                    subtitle: 'Backend Developer',
-                    description:
-                        'Lorem Ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam id rhoncus luctus, nisl quam aliquam nunc, vitae aliquam nisl nunc vitae nisl. Sed euismod, diam id rhoncus luctus, nisl quam aliquam nunc, vitae aliquam nisl nunc vitae nisl.',
-                    image: 'assets/suit-ichlasul.jpg'),
-              ],
-            ),
-            ListView(
+        body: Obx(() => TabBarView(
+              controller: controller.tabController,
               children: [
-                CustomCard(
-                    profileImage: 'assets/ichlasul.png',
-                    title: 'Ichlasul Amal Pangestu',
-                    subtitle: 'Backend Developer',
-                    description:
-                        'Lorem Ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam id rhoncus luctus, nisl quam aliquam nunc, vitae aliquam nisl nunc vitae nisl. Sed euismod, diam id rhoncus luctus, nisl quam aliquam nunc, vitae aliquam nisl nunc vitae nisl.',
-                    image: 'assets/suit-ichlasul.jpg'),
+                controller.hasError.value
+                    ? Center(
+                        child: Text(controller.errorMessage.value),
+                      )
+                    : Obx(() => ListView.builder(
+                          itemCount: controller.barang.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final item = controller.barang[index];
+                            Uint8List imageMemory =
+                                base64Decode(item.imageBase64!);
+                            return CustomCard(
+                              profileImage: 'assets/ichlasul.png',
+                              title: 'Ichlasul Amal Pangestu',
+                              subtitle: 'Backend Developer',
+                              description: item.description!,
+                              image: imageMemory,
+                              dataBarang: item,
+                            );
+                          },
+                        )),
+                const Icon(Icons.directions_bike),
+                const Icon(Icons.directions_bike),
               ],
-            ),
-            const Icon(Icons.directions_bike),
-          ],
-        ));
+            )));
   }
 }
