@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 import 'dart:io';
 
@@ -9,9 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../data/barang_model.dart';
 
 class HomepageController extends GetxController
-    // ignore: deprecated_member_use
-    with
-        SingleGetTickerProviderMixin {
+    with SingleGetTickerProviderMixin {
   final barang = <BarangModel>[].obs;
   final isLoading = false.obs;
   final hasError = false.obs;
@@ -90,7 +90,8 @@ class HomepageController extends GetxController
     tabController = TabController(length: 3, vsync: this);
     pageController = PageController();
 
-    timer = Timer.periodic(Duration(seconds: 30), (Timer t) => _fetchData());
+    timer =
+        Timer.periodic(const Duration(seconds: 30), (Timer t) => _fetchData());
   }
 
   @override

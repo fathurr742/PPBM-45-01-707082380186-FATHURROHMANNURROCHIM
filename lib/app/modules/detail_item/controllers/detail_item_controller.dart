@@ -1,11 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mysql1/mysql1.dart';
 
 class DetailItemController extends GetxController
-    // ignore: deprecated_member_use
-    with
-        SingleGetTickerProviderMixin {
+    with SingleGetTickerProviderMixin {
   late TextEditingController waist;
   late TextEditingController length;
   late TextEditingController breadth;
@@ -34,7 +34,7 @@ class DetailItemController extends GetxController
     super.onInit();
   }
 
-  Future<void> insertData(int total_harga, String namaBarang) async {
+  Future<void> insertData(int totalHarga, String namaBarang) async {
     final waistValue = waist.text;
     final lengthValue = length.text;
     final breadthValue = breadth.text;
@@ -45,21 +45,24 @@ class DetailItemController extends GetxController
       Theme(
         data: ThemeData(dialogBackgroundColor: Colors.pink),
         child: AlertDialog(
-          title: Text('Confirm Order', style: TextStyle(color: Colors.white)),
-          content: Text('Are you sure you want to place this order?',
+          title: const Text('Confirm Order',
               style: TextStyle(color: Colors.white)),
-          shape: RoundedRectangleBorder(
+          content: const Text('Are you sure you want to place this order?',
+              style: TextStyle(color: Colors.white)),
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0)),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel', style: TextStyle(color: Colors.white)),
+              child:
+                  const Text('Cancel', style: TextStyle(color: Colors.white)),
               onPressed: () {
                 Get.back(result: false);
               },
             ),
             TextButton(
-              child: Text('Confirm', style: TextStyle(color: Colors.white)),
+              child:
+                  const Text('Confirm', style: TextStyle(color: Colors.white)),
               onPressed: () async {
                 Get.back(closeOverlays: true);
 
@@ -72,7 +75,7 @@ class DetailItemController extends GetxController
                     breadthValue,
                     selectedColorValue,
                     quantityValue,
-                    total_harga
+                    totalHarga
                   ],
                 );
 

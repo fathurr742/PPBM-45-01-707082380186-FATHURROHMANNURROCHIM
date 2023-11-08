@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:e_commerce/app/helper/customappbar.dart';
-import 'package:e_commerce/app/helper/customcard.dart';
+import 'package:e_commerce/app/helper/custom_appbar.dart';
+import 'package:e_commerce/app/helper/custom_card.dart';
 import 'package:e_commerce/app/modules/homepage/controllers/homepage_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

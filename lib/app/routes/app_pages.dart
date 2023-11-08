@@ -23,7 +23,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.INTRODUCTION,
-      page: () => IntroductionView(),
+      page: () => const IntroductionView(),
       binding: IntroductionBinding(),
     ),
     GetPage(

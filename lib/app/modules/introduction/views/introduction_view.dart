@@ -1,4 +1,4 @@
-import 'package:e_commerce/app/helper/customIntro.dart';
+import 'package:e_commerce/app/helper/custom_intro.dart';
 import 'package:e_commerce/app/modules/homepage/views/homepage_view.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_slider/introduction_slider.dart';

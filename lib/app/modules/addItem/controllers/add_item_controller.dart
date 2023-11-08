@@ -20,7 +20,11 @@ class AddItemController extends GetxController {
       image.value = File(pickedFile.path);
       base64Image = base64Encode(await image.value!.readAsBytes());
     } else {
-      print('No image selected.');
+      Get.snackbar(
+          backgroundColor: Colors.pink,
+          colorText: Colors.white,
+          'Error',
+          'Tidak Gambar yang di pilih');
     }
   }
 

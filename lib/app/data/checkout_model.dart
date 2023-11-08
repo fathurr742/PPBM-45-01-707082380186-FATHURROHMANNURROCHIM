@@ -3,12 +3,12 @@ class CheckoutModel {
   final String? namaBarang;
   final String? color;
   final int? quantity;
-  final int? total_harga;
+  final int? totalHarga;
 
   CheckoutModel(
       {required this.id,
       required this.quantity,
       required this.namaBarang,
       required this.color,
-      required this.total_harga});
+      required this.totalHarga});
 }

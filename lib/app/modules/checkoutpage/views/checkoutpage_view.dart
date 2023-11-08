@@ -1,4 +1,4 @@
-import 'package:e_commerce/app/helper/customappbar.dart';
+import 'package:e_commerce/app/helper/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,7 +29,7 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                 context: context,
                 builder: (BuildContext context) {
                   return Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     decoration: const BoxDecoration(
                       color: Colors.pink,
                       borderRadius: BorderRadius.only(
@@ -116,7 +116,7 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                           style: GoogleFonts.raleway(color: Colors.white),
                         ),
                         Text(
-                          formatCurrency.format(item.total_harga),
+                          formatCurrency.format(item.totalHarga),
                           style: GoogleFonts.raleway(color: Colors.white),
                         ),
                       ],

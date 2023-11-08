@@ -1,4 +1,5 @@
 import 'package:e_commerce/app/data/checkout_model.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mysql1/mysql1.dart';
 
@@ -45,14 +46,14 @@ class CheckoutpageController extends GetxController {
         final namaBarang = row['nama_barang'] as String;
         final color = row['color'] as String;
         final quantity = row['quantity'] as int;
-        final total_harga = row['total_harga'] as int;
+        final totalHarga = row['total_harga'] as int;
 
         return CheckoutModel(
             id: id,
             namaBarang: namaBarang,
             color: color,
             quantity: quantity,
-            total_harga: total_harga);
+            totalHarga: totalHarga);
       }).toList();
 
       items.assignAll(data);
@@ -76,10 +77,13 @@ class CheckoutpageController extends GetxController {
 
     try {
       await conn.query('DELETE FROM tb_barang WHERE id = ?', [id]);
-      items.removeWhere(
-          (item) => item.id == id /* where this id get data from?*/);
+      items.removeWhere((item) => item.id == id);
     } catch (e) {
-      print(e);
+      Get.snackbar(
+          backgroundColor: Colors.pink,
+          colorText: Colors.white,
+          'Error',
+          'Data gagal dihapus');
     } finally {
       await conn.close();
     }
