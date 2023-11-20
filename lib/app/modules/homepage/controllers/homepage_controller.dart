@@ -3,9 +3,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mysql1/mysql1.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../data/barang_model.dart';
@@ -23,26 +24,22 @@ class HomepageController extends GetxController
   GlobalKey bottomNavigationKey = GlobalKey();
   RxInt selectedIndex = 0.obs;
 
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   Future<void> _fetchData() async {
-    final conn = await MySqlConnection.connect(ConnectionSettings(
-      host: '192.168.137.1',
-      port: 3306,
-      user: 'flutter',
-      password: 'malammakan',
-      db: 'latihan_flutter',
-    ));
-
     try {
-      final result = await conn.query("SELECT * FROM tb_barang");
+      final result = await firestore.collection('tb_barang').get();
 
-      final hasilFetch = result.map((fetch) {
-        final id = fetch['id'] as int;
-
-        final namaBarang = fetch['nama_barang'] as String;
-        final description = fetch['description'] as String;
-        final price = fetch['price'] as int;
-        final imageBlob = fetch['image'] as Blob;
-        String imageBase64 = String.fromCharCodes(imageBlob.toBytes());
+      final hasilFetch = result.docs.map((doc) {
+        final data = doc.data();
+        final id = data['id'] != null ? data['id'] as int : null;
+        final namaBarang =
+            data['nama_barang'] != null ? data['nama_barang'] as String : null;
+        final description =
+            data['description'] != null ? data['description'] as String : null;
+        final price = data['price'] != null ? data['price'] as int : null;
+        final imageBase64 =
+            data['image'] != null ? data['image'] as String : null;
 
         return BarangModel(
             id: id,
@@ -57,8 +54,6 @@ class HomepageController extends GetxController
     } catch (e) {
       hasError.value = true;
       errorMessage.value = e.toString();
-    } finally {
-      await conn.close();
     }
   }
 
@@ -91,7 +86,7 @@ class HomepageController extends GetxController
     pageController = PageController();
 
     timer =
-        Timer.periodic(const Duration(seconds: 30), (Timer t) => _fetchData());
+        Timer.periodic(const Duration(seconds: 5), (Timer t) => _fetchData());
   }
 
   @override

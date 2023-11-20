@@ -177,7 +177,36 @@ class AddItemView extends GetView<AddItemController> {
                               onPressed: () {
                                 if (controller.formKey.currentState!
                                     .validate()) {
-                                  controller.addItem();
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return FutureBuilder(
+                                        future: controller.addItem(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const AlertDialog(
+                                              content: Row(
+                                                children: [
+                                                  CircularProgressIndicator(),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 10),
+                                                    child:
+                                                        Text('Adding item...'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          } else {
+                                            Navigator.of(context).pop();
+                                            return const SizedBox.shrink();
+                                          }
+                                        },
+                                      );
+                                    },
+                                  );
                                 }
                               },
                               child: const Text('Add Item')),

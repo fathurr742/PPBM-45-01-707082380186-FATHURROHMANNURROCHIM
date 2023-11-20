@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mysql1/mysql1.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DetailItemController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -14,7 +14,7 @@ class DetailItemController extends GetxController
   late TabController tabController;
   final RxInt quantity = 1.obs;
 
-  late MySqlConnection conn;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   void onInit() async {
@@ -22,14 +22,7 @@ class DetailItemController extends GetxController
     length = TextEditingController(); // Initialize the length field
     breadth = TextEditingController(); // Initialize the breadth field
 
-    tabController = TabController(length: 3, vsync: this);
-    conn = await MySqlConnection.connect(ConnectionSettings(
-      host: '192.168.137.1',
-      port: 3306,
-      user: 'flutter',
-      password: 'malammakan',
-      db: 'latihan_flutter',
-    ));
+    tabController = TabController(length: 2, vsync: this);
 
     super.onInit();
   }
@@ -66,30 +59,23 @@ class DetailItemController extends GetxController
               onPressed: () async {
                 Get.back(closeOverlays: true);
 
-                final result = await conn.query(
-                  'INSERT INTO tb_order (nama_barang, waist, length, breadth, color, quantity, total_harga) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                  [
-                    namaBarang,
-                    waistValue,
-                    lengthValue,
-                    breadthValue,
-                    selectedColorValue,
-                    quantityValue,
-                    totalHarga
-                  ],
-                );
-
-                if (result.affectedRows == 1) {
+                await firestore.collection('tb_order').add({
+                  'nama_barang': namaBarang,
+                  'waist': waistValue,
+                  'length': lengthValue,
+                  'breadth': breadthValue,
+                  'color': selectedColorValue,
+                  'quantity': quantityValue,
+                  'total_harga': totalHarga,
+                }).then((value) {
                   Get.snackbar(
                       backgroundColor: Colors.pink,
                       colorText: Colors.white,
                       'Success',
                       'Item successfully added to cart');
-                } else {
+                }).catchError((error) {
                   Get.snackbar('Error', 'Data gagal ditambahkan');
-                }
-
-                // Show Snackbar and navigate to homepage here
+                });
               },
             ),
           ],
@@ -100,7 +86,11 @@ class DetailItemController extends GetxController
 
   @override
   void onClose() {
-    conn.close();
+    waist.dispose();
+    length.dispose();
+    breadth.dispose();
+    tabController.dispose();
+
     super.onClose();
   }
 }

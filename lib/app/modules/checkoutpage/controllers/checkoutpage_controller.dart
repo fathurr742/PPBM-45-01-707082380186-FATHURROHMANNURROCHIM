@@ -1,7 +1,7 @@
 import 'package:e_commerce/app/data/checkout_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mysql1/mysql1.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BarangModel {
   final int? id;
@@ -21,6 +21,7 @@ class CheckoutpageController extends GetxController {
   final isLoading = false.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   void onInit() {
@@ -29,24 +30,18 @@ class CheckoutpageController extends GetxController {
   }
 
   Future<void> _fetchData() async {
-    final conn = await MySqlConnection.connect(ConnectionSettings(
-      host: '192.168.137.1',
-      port: 3306,
-      user: 'flutter',
-      password: 'malammakan',
-      db: 'latihan_flutter',
-    ));
-
     try {
-      final results = await conn.query(
-          'SELECT id, nama_barang, color, quantity, total_harga FROM tb_order');
-
-      final data = results.map((row) {
-        final id = row['id'] as int;
-        final namaBarang = row['nama_barang'] as String;
-        final color = row['color'] as String;
-        final quantity = row['quantity'] as int;
-        final totalHarga = row['total_harga'] as int;
+      final result = await firestore.collection('tb_order').get();
+      final data = result.docs.map((doc) {
+        final data = doc.data();
+        final id = data['id'] != null ? data['id'] as int : null;
+        final namaBarang =
+            data['nama_barang'] != null ? data['nama_barang'] as String : null;
+        final color = data['color'] != null ? data['color'] as String : null;
+        final quantity =
+            data['quantity'] != null ? data['quantity'] as int : null;
+        final totalHarga =
+            data['total_harga'] != null ? data['total_harga'] as int : null;
 
         return CheckoutModel(
             id: id,
@@ -61,22 +56,12 @@ class CheckoutpageController extends GetxController {
     } catch (e) {
       hasError.value = true;
       errorMessage.value = e.toString();
-    } finally {
-      await conn.close();
-    }
+    } finally {}
   }
 
   Future<void> delete(int id) async {
-    final conn = await MySqlConnection.connect(ConnectionSettings(
-      host: '192.168.137.1',
-      port: 3306,
-      user: 'flutter',
-      password: 'malammakan',
-      db: 'latihan_flutter',
-    ));
-
     try {
-      await conn.query('DELETE FROM tb_barang WHERE id = ?', [id]);
+      await firestore.collection('tb_order').doc(id.toString()).delete();
       items.removeWhere((item) => item.id == id);
     } catch (e) {
       Get.snackbar(
@@ -84,8 +69,6 @@ class CheckoutpageController extends GetxController {
           colorText: Colors.white,
           'Error',
           'Data gagal dihapus');
-    } finally {
-      await conn.close();
     }
   }
 }

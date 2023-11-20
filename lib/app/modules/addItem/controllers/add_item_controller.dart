@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:mysql1/mysql1.dart';
+import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_compression/image_compression.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -12,13 +14,26 @@ class AddItemController extends GetxController {
   late TextEditingController priceController;
   Rxn<File> image = Rxn<File>();
   String? base64Image;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> pickImage() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      image.value = File(pickedFile.path);
-      base64Image = base64Encode(await image.value!.readAsBytes());
+      // Compress the image file
+      final bytes = await pickedFile.readAsBytes();
+      final path = pickedFile.path;
+      final input = ImageFile(
+        rawBytes: bytes,
+        filePath: path,
+      );
+      final output =
+          await compressInQueue(ImageFileConfiguration(input: input));
+      // Convert the compressed image to base64
+      base64Image = base64Encode(output.rawBytes);
+
+      // Update the image value with the file
+      image.value = File(input.filePath);
     } else {
       Get.snackbar(
           backgroundColor: Colors.pink,
@@ -31,42 +46,30 @@ class AddItemController extends GetxController {
   Future<void> addItem() async {
     final namaBarang = titleController.text;
     final description = descriptionController.text;
-    final price = priceController.text;
-
-    final conn = await MySqlConnection.connect(
-      ConnectionSettings(
-        host: '192.168.137.1',
-        port: 3306,
-        user: 'flutter',
-        password: 'malammakan',
-        db: 'latihan_flutter',
-      ),
-    );
+    final price = int.parse(priceController.text);
 
     try {
-      final result = await conn.query(
-        'INSERT INTO tb_barang (nama_barang, description, price, image) VALUES (?, ?, ?, ?)',
-        [
-          namaBarang,
-          description,
-          price,
-          base64Image,
-        ],
-      );
+      await firestore.collection('tb_barang').add({
+        'nama_barang': namaBarang,
+        'description': description,
+        'price': price,
+        'image': base64Image,
+      });
 
-      if (result.affectedRows != 0) {
-        Get.snackbar(
-            backgroundColor: Colors.pink,
-            colorText: Colors.white,
-            'Berhasil',
-            'Data ditambahkan');
-      } else {
-        Get.snackbar('Error', 'Data gagal ditambahkan');
-      }
+      Get.snackbar(
+        backgroundColor: Colors.pink,
+        colorText: Colors.white,
+        'Berhasil',
+        'Data ditambahkan',
+        snackbarStatus: (status) {
+          titleController.clear();
+          descriptionController.clear();
+          priceController.clear();
+          image.value = null;
+        },
+      );
     } catch (e) {
       Get.snackbar('Error', e.toString());
-    } finally {
-      await conn.close();
     }
   }
 
