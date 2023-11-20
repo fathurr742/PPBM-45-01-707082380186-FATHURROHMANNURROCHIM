@@ -1,0 +1,51 @@
+name: e_commerce
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment:
+  sdk: ">=3.0.5 <4.0.0"
+
+dependencies:
+  cupertino_icons: ^1.0.2
+  get: 4.6.6
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.1.0
+  introduction_screen: ^3.1.12
+  introduction_slider: ^2.0.1
+  another_flutter_splash_screen: ^1.2.0
+  fancy_bottom_navigation: ^0.3.3
+  flutter_image_slideshow: ^0.1.6
+  image_picker: ^1.0.4
+  permission_handler: ^11.0.1
+  image_picker_for_web: ^3.0.1
+  path_provider: ^2.1.1
+  intl: ^0.18.1
+  firebase_core: ^2.22.0
+  cloud_firestore: ^4.13.1
+  flutter_image_compress: ^2.1.0
+  image_compression: ^1.0.4
+  material_design_icons_flutter: ^7.0.7296
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+  fonts:
+    - family: LEMONMILK-Regular
+      fonts:
+        - asset: assets/LEMONMILK-Regular.otf
+    - family: LEMONMILK-Bold
+      fonts:
+        - asset: assets/LEMONMILK-Bold.otf
+    - family: LEMONMILK-Light
+      fonts:
+        - asset: assets/LEMONMILK-Light.otf
+    - family: LEMONMILK-Medium
+      fonts:
+        - asset: assets/LEMONMILK-Medium.otf
