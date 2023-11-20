@@ -374,12 +374,6 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "logging",
-      "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/logging-1.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
       "name": "matcher",
       "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/matcher-0.12.16",
       "packageUri": "lib/",
@@ -392,6 +386,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "material_design_icons_flutter",
+      "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/material_design_icons_flutter-7.0.7296",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "meta",
       "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.9.1",
       "packageUri": "lib/",
@@ -402,12 +402,6 @@
       "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/mime-1.0.4",
       "packageUri": "lib/",
       "languageVersion": "2.18"
-    },
-    {
-      "name": "mysql1",
-      "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/mysql1-0.20.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
     },
     {
       "name": "path",
@@ -506,12 +500,6 @@
       "languageVersion": "2.14"
     },
     {
-      "name": "pool",
-      "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/pool-1.5.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "sky_engine",
       "rootUri": "file:///C:/src/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -566,22 +554,10 @@
       "languageVersion": "2.14"
     },
     {
-      "name": "visibility_detector",
-      "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/visibility_detector-0.3.3",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "web",
       "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/web-0.1.4-beta",
       "packageUri": "lib/",
       "languageVersion": "3.1"
-    },
-    {
-      "name": "widget_visibility_detector",
-      "rootUri": "file:///C:/Users/fathu/AppData/Local/Pub/Cache/hosted/pub.dev/widget_visibility_detector-1.0.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.16"
     },
     {
       "name": "win32",
@@ -608,7 +584,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-20T06:49:47.822145Z",
+  "generated": "2023-11-20T21:15:54.577544Z",
   "generator": "pub",
   "generatorVersion": "3.1.4"
 }
