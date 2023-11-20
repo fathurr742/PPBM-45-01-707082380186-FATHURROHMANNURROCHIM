@@ -6,10 +6,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actionbar;
   final TabBar? tabBar;
   final double heigh;
+  final Color? bgcolor;
+  final Color? textcolor;
 
   const CustomAppBar(
       {super.key,
       this.title,
+      this.bgcolor,
+      this.textcolor,
       this.actionbar,
       this.tabBar,
       required this.heigh});
@@ -20,11 +24,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       appBar: AppBar(
         foregroundColor: Colors.black,
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: bgcolor ?? Colors.transparent,
         title: Text(
           title!,
           style: GoogleFonts.abrilFatface(
-              color: Colors.black, fontWeight: FontWeight.bold),
+              color: textcolor ?? Colors.white, fontWeight: FontWeight.bold),
         ),
         actions: actionbar,
         bottom: tabBar,

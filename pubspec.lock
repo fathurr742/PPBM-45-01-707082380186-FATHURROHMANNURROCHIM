@@ -488,14 +488,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  logging:
-    dependency: transitive
-    description:
-      name: logging
-      sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0"
   matcher:
     dependency: transitive
     description:
@@ -512,6 +504,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.0"
+  material_design_icons_flutter:
+    dependency: "direct main"
+    description:
+      name: material_design_icons_flutter
+      sha256: "6f986b7a51f3ad4c00e33c5c84e8de1bdd140489bbcdc8b66fc1283dad4dea5a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.7296"
   meta:
     dependency: transitive
     description:
@@ -528,14 +528,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  mysql1:
-    dependency: "direct main"
-    description:
-      name: mysql1
-      sha256: "68aec7003d2abc85769bafa1777af3f4a390a90c31032b89636758ff8eb839e9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.20.0"
   path:
     dependency: transitive
     description:
@@ -664,14 +656,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.3"
-  pool:
-    dependency: transitive
-    description:
-      name: pool
-      sha256: "20fe868b6314b322ea036ba325e6fc0711a22948856475e2c2b6306e8ab39c2a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -741,14 +725,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  visibility_detector:
-    dependency: transitive
-    description:
-      name: visibility_detector
-      sha256: "15c54a459ec2c17b4705450483f3d5a2858e733aee893dcee9d75fd04814940d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.3"
   web:
     dependency: transitive
     description:
@@ -757,14 +733,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.4-beta"
-  widget_visibility_detector:
-    dependency: "direct main"
-    description:
-      name: widget_visibility_detector
-      sha256: c5f44e9b75fd7db8d9e8ba1680c1dcb3268c9613f36cf2b27aceb31dc8019117
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   win32:
     dependency: transitive
     description:

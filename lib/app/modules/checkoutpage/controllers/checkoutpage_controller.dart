@@ -1,74 +1,86 @@
+import 'dart:async';
+
 import 'package:e_commerce/app/data/checkout_model.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class BarangModel {
-  final int? id;
-  final String namaBarang;
-  final String color;
-  final int quantity;
-
-  BarangModel(
-      {required this.id,
-      required this.namaBarang,
-      required this.color,
-      required this.quantity});
-}
+enum PaymentMethod { Bank, E_Wallet, Merchant, Qris }
 
 class CheckoutpageController extends GetxController {
   final items = <CheckoutModel>[].obs;
   final isLoading = false.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
+  RxInt quantity = RxInt(0);
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  Timer? timer;
+  var selectedMethod = Rx<PaymentMethod>(PaymentMethod.Bank);
 
   @override
   void onInit() {
     super.onInit();
-    _fetchData();
+
+    firestore.collection('tb_order').snapshots().listen((snapshot) {
+      _fetchData(snapshot.docs);
+    });
   }
 
-  Future<void> _fetchData() async {
+  Future<void> _fetchData(List<QueryDocumentSnapshot> orderDocs) async {
     try {
-      final result = await firestore.collection('tb_order').get();
-      final data = result.docs.map((doc) {
-        final data = doc.data();
-        final id = data['id'] != null ? data['id'] as int : null;
-        final namaBarang =
-            data['nama_barang'] != null ? data['nama_barang'] as String : null;
-        final color = data['color'] != null ? data['color'] as String : null;
-        final quantity =
-            data['quantity'] != null ? data['quantity'] as int : null;
-        final totalHarga =
-            data['total_harga'] != null ? data['total_harga'] as int : null;
+      items.clear(); // clear the items list
 
-        return CheckoutModel(
-            id: id,
-            namaBarang: namaBarang,
-            color: color,
-            quantity: quantity,
-            totalHarga: totalHarga);
-      }).toList();
+      for (var orderDoc in orderDocs) {
+        final Map<String, dynamic>? orderData =
+            orderDoc.data() as Map<String, dynamic>?;
 
-      items.assignAll(data);
-      isLoading.value = false;
-    } catch (e) {
+        if (orderData != null) {
+          final namaBarang = orderData['nama_barang'];
+
+          final barangResult = await firestore
+              .collection('tb_barang')
+              .where('nama_barang', isEqualTo: namaBarang)
+              .get();
+
+          for (var barangDoc in barangResult.docs) {
+            final Map<String, dynamic>? barangData =
+                barangDoc.data() as Map<String, dynamic>?;
+
+            if (barangData != null) {
+              final checkoutItem = CheckoutModel(
+                namaBarang: barangData['nama_barang'],
+                color: orderData['color'],
+                quantity: orderData['quantity'],
+                totalHarga: orderData['total_harga'],
+                image64: barangData['image'],
+                waist: orderData['waist'],
+                length: orderData['length'],
+                breadth: orderData['breadth'],
+              );
+
+              items.add(checkoutItem);
+            }
+          }
+        }
+      }
+    } catch (error) {
       hasError.value = true;
-      errorMessage.value = e.toString();
-    } finally {}
+      errorMessage.value = error.toString();
+    } finally {
+      isLoading.value = false;
+    }
   }
 
-  Future<void> delete(int id) async {
-    try {
-      await firestore.collection('tb_order').doc(id.toString()).delete();
-      items.removeWhere((item) => item.id == id);
-    } catch (e) {
-      Get.snackbar(
-          backgroundColor: Colors.pink,
-          colorText: Colors.white,
-          'Error',
-          'Data gagal dihapus');
+  void increaseQuantity(CheckoutModel item) {
+    item.quantity!.value++;
+  }
+
+  void decreaseQuantity(CheckoutModel item) {
+    if (item.quantity!.value > 1) {
+      item.quantity!.value--;
     }
+  }
+
+  void selectMethod(PaymentMethod method) {
+    selectedMethod.value = method;
   }
 }
