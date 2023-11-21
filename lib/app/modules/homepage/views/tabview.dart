@@ -56,14 +56,16 @@ class MyTabView extends GetView<HomepageController> {
                           itemCount: controller.barang.length,
                           itemBuilder: (BuildContext context, int index) {
                             final item = controller.barang[index];
-                            Uint8List imageMemory =
-                                base64Decode(item.imageBase64!);
+
+                            Uint8List? imageMemory = item.imageBase64 != null
+                                ? base64Decode(item.imageBase64!)
+                                : null;
                             return CustomCard(
                               profileImage: 'assets/ichlasul.png',
                               title: 'Ichlasul Amal Pangestu',
                               subtitle: 'Backend Developer',
-                              description: item.description!,
-                              image: imageMemory,
+                              description: item.description ?? 'No Description',
+                              image: imageMemory ?? Uint8List(0),
                               dataBarang: item,
                             );
                           },

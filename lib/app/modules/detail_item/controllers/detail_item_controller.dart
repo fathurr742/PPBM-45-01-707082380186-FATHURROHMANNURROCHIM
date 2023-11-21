@@ -60,6 +60,7 @@ class DetailItemController extends GetxController
                 Get.back(closeOverlays: true);
 
                 await firestore.collection('tb_order').add({
+                  'createdAt': FieldValue.serverTimestamp(),
                   'nama_barang': namaBarang,
                   'waist': waistValue,
                   'length': lengthValue,
