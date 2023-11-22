@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_compression_flutter/image_compression_flutter.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,30 +19,17 @@ class AddItemController extends GetxController {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      // Read the image file
-      final bytes = await pickedFile.readAsBytes();
-      final path = pickedFile.path;
-      final input = ImageFile(
-        rawBytes: bytes,
-        filePath: path,
-      );
-
-      // Set the configuration for the compression
-      const config = Configuration(
-        outputType: ImageOutputType.webpThenJpg,
-        useJpgPngNativeCompressor: false,
-        quality: 40,
-      );
-
       // Compress the image
-      final param = ImageFileConfiguration(input: input, config: config);
-      final output = await compressor.compress(param);
+      final result = await FlutterImageCompress.compressWithFile(
+        pickedFile.path,
+        quality: 94,
+      );
 
       // Convert the compressed image to base64
-      base64Image = base64Encode(output.rawBytes);
+      base64Image = base64Encode(result!);
 
       // Update the image value with the compressed file
-      image.value = File(input.filePath);
+      image.value = File(pickedFile.path);
     } else {
       Get.snackbar(
         backgroundColor: Colors.pink,

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:e_commerce/app/data/barang_model.dart';
 import 'package:e_commerce/app/helper/colordropdown.dart';
@@ -14,6 +14,15 @@ import '../controllers/detail_item_controller.dart';
 
 class DetailItemView extends GetView<DetailItemController> {
   final BarangModel dataBarang;
+
+  bool isValidBase64(String base64String) {
+    try {
+      base64Decode(base64String);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 
   @override
   final DetailItemController controller = Get.put(DetailItemController());
@@ -43,7 +52,6 @@ class DetailItemView extends GetView<DetailItemController> {
   }
 
   Widget imageSlider() {
-    Uint8List imageBytes = base64Decode(dataBarang.imageBase64!);
     return ImageSlideshow(
       width: double.infinity,
       height: 300,
@@ -52,18 +60,33 @@ class DetailItemView extends GetView<DetailItemController> {
       isLoop: true,
       indicatorBackgroundColor: Colors.grey,
       children: [
-        Image.memory(
-          imageBytes,
-          fit: BoxFit.cover,
-        ),
-        Image.memory(
-          imageBytes,
-          fit: BoxFit.cover,
-        ),
-        Image.memory(
-          imageBytes,
-          fit: BoxFit.cover,
-        ),
+        dataBarang.image is String && isValidBase64(dataBarang.image)
+            ? Image.memory(
+                base64Decode(dataBarang.image),
+                fit: BoxFit.cover,
+              )
+            : Image.network(
+                dataBarang.image,
+                fit: BoxFit.cover,
+              ),
+        dataBarang.image is String && isValidBase64(dataBarang.image)
+            ? Image.memory(
+                base64Decode(dataBarang.image),
+                fit: BoxFit.cover,
+              )
+            : Image.network(
+                dataBarang.image!,
+                fit: BoxFit.cover,
+              ),
+        dataBarang.image is String && isValidBase64(dataBarang.image)
+            ? Image.memory(
+                base64Decode(dataBarang.image),
+                fit: BoxFit.cover,
+              )
+            : Image.network(
+                dataBarang.image!,
+                fit: BoxFit.cover,
+              ),
       ],
     );
   }
@@ -202,6 +225,8 @@ class DetailItemView extends GetView<DetailItemController> {
                     TextFormField(
                       controller: controller.waist,
                       textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(8),
                         filled: true,
@@ -230,6 +255,8 @@ class DetailItemView extends GetView<DetailItemController> {
                     TextFormField(
                       controller: controller.length,
                       textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(8),
                         filled: true,
@@ -258,6 +285,8 @@ class DetailItemView extends GetView<DetailItemController> {
                     TextFormField(
                       controller: controller.breadth,
                       textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(8),
                         filled: true,

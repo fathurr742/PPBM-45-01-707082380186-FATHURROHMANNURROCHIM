@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 
 class CheckoutModel {
+  // Add a new field for the document ID
+  final String? id;
   final String? namaBarang;
   final String? color;
   final String? waist;
@@ -11,6 +13,7 @@ class CheckoutModel {
   final String? image64;
 
   CheckoutModel({
+    required this.id,
     required int quantity,
     required this.waist,
     required this.length,

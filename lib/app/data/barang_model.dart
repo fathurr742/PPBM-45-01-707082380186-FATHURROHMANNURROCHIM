@@ -1,11 +1,11 @@
 class BarangModel {
-  final String? imageBase64;
+  final dynamic image;
   final String? namaBarang;
   final String? description;
   final int? price;
 
   BarangModel(
-      {required this.imageBase64,
+      {required this.image,
       required this.namaBarang,
       required this.description,
       required this.price});

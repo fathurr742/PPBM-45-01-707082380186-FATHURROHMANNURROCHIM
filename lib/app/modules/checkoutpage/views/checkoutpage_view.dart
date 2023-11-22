@@ -154,18 +154,18 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
             margin: const EdgeInsets.symmetric(vertical: 20),
             child: ElevatedButton(
               onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pink,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
               child: Text(
                 'Bayar Sekarang',
                 style: GoogleFonts.poppins(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
               ),
             )),
       ],
@@ -263,17 +263,26 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
   }
 
   Widget produktile() {
+    bool isValidBase64(String base64String) {
+      try {
+        base64Decode(base64String);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
     return Obx(() => ListView.builder(
           shrinkWrap: true, // Add this line
           physics: const NeverScrollableScrollPhysics(),
           itemCount: controller.items.length,
           itemBuilder: (context, int index) {
             final item = controller.items[index];
-            Uint8List bytes = base64.decode(item.image64!);
+
             return Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
-              padding: const EdgeInsets.all(15),
-              height: 190,
+              padding: const EdgeInsets.all(10),
+              height: 220,
               width: Get.width,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -313,7 +322,31 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                         ],
                       ),
                       IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.close))
+                          onPressed: () {
+                            Get.dialog(
+                              AlertDialog(
+                                title: const Text('Hapus Item'),
+                                content: const Text(
+                                    'Apakah anda yakin ingin menghapus item ini?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      controller.deleteItem(item.id!);
+                                      Get.back();
+                                    },
+                                    child: const Text('Hapus'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: const Text('Batal'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.close))
                     ],
                   ),
                   const SizedBox(
@@ -333,77 +366,88 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                         Expanded(
                           child: Row(
                             children: [
-                              Container(
-                                height: 70,
-                                width: 70,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: MemoryImage(bytes),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
+                              item.image64 is String &&
+                                      isValidBase64(item.image64!)
+                                  ? Image.memory(
+                                      width: 50,
+                                      height: 100,
+                                      base64Decode(item.image64!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : item.image64 is String
+                                      ? Image.network(
+                                          width: 50,
+                                          height: 100,
+                                          item.image64!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Icon(MdiIcons
+                                          .pictureInPictureTopRightOutline),
                               const SizedBox(
                                 width: 15,
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    item.namaBarang!,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    item.color!,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text('W: ${item.waist!}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 12,
-                                          )),
-                                      const SizedBox(
-                                        width: 10,
+                              SizedBox(
+                                width: 140,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      item.namaBarang!,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                      Text('L: ${item.length!}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 12,
-                                          )),
-                                      const SizedBox(
-                                        width: 10,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      item.color!,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
                                       ),
-                                      Text('B: ${item.breadth!}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: 12,
-                                          )),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Obx(() => Text(
-                                        formatCurrency.format(item.totalHarga! *
-                                            item.quantity!.value),
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.pink,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text('W: ${item.waist!}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                            )),
+                                        const SizedBox(
+                                          width: 10,
                                         ),
-                                      )),
-                                ],
+                                        Text('L: ${item.length!}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                            )),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text('B: ${item.breadth!}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                            )),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Obx(() => Text(
+                                          formatCurrency.format(
+                                              item.totalHarga! *
+                                                  item.quantity!.value),
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.pink,
+                                          ),
+                                        )),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -411,6 +455,7 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                         Row(
                           children: <Widget>[
                             IconButton(
+                              iconSize: 20,
                               icon: const Icon(Icons.remove),
                               onPressed: () =>
                                   controller.decreaseQuantity(item),
@@ -418,6 +463,7 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                             Obx(() => Text(
                                 '${item.quantity!.value}')), // wrap with Obx
                             IconButton(
+                              iconSize: 20,
                               icon: const Icon(Icons.add),
                               onPressed: () =>
                                   controller.increaseQuantity(item),

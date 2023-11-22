@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:e_commerce/app/data/barang_model.dart';
@@ -9,8 +10,17 @@ import 'package:get/get.dart';
 // ignore: must_be_immutable
 class CustomCard extends StatelessWidget {
   String? profileImage, title, subtitle, description;
-  Uint8List image;
+  dynamic image;
   final BarangModel dataBarang;
+
+  bool isValidBase64(String base64String) {
+    try {
+      base64Decode(base64String);
+      return true;
+    } catch (FormatException) {
+      return false;
+    }
+  }
 
   CustomCard(
       {super.key,
@@ -43,7 +53,7 @@ class CustomCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,6 +68,7 @@ class CustomCard extends StatelessWidget {
                         width: 10,
                       ),
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -104,6 +115,7 @@ class CustomCard extends StatelessWidget {
                 height: 10,
               ),
               Text(description!,
+                  textAlign: TextAlign.start,
                   maxLines: 5,
                   style: GoogleFonts.aBeeZee(
                       fontSize: 12,
@@ -119,12 +131,17 @@ class CustomCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: image.isNotEmpty
-                            ? Image(
-                                image: MemoryImage(image),
+                        child: image is String && isValidBase64(image)
+                            ? Image.memory(
+                                base64Decode(image),
                                 fit: BoxFit.cover,
                               )
-                            : Container(),
+                            : image is String && image.isNotEmpty
+                                ? Image.network(
+                                    image,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Container(),
                       ),
                     ],
                   ),

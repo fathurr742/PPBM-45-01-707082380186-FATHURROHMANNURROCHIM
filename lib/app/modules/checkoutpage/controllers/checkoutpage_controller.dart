@@ -55,6 +55,7 @@ class CheckoutpageController extends GetxController {
             final Map<String, dynamic> barangData = barangDoc.data();
 
             final checkoutItem = CheckoutModel(
+              id: orderDoc.id,
               namaBarang: barangData['nama_barang'],
               color: orderData['color'],
               quantity: orderData['quantity'],
@@ -101,5 +102,9 @@ class CheckoutpageController extends GetxController {
     }
 
     return grandTotal;
+  }
+
+  Future<void> deleteItem(String id) async {
+    await firestore.collection('tb_order').doc(id).delete();
   }
 }
