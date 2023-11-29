@@ -1,6 +1,4 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
+import 'package:e_commerce/app/data/barang_model.dart';
 import 'package:e_commerce/app/helper/custom_appbar.dart';
 import 'package:e_commerce/app/helper/custom_card.dart';
 import 'package:e_commerce/app/modules/homepage/controllers/homepage_controller.dart';
@@ -48,64 +46,52 @@ class MyTabView extends GetView<HomepageController> {
         body: Obx(() => TabBarView(
               controller: controller.tabController,
               children: [
-                controller.hasError.value
-                    ? Center(
-                        child: Text(controller.errorMessage.value),
-                      )
-                    : Obx(() => ListView.builder(
-                          itemCount: controller.barang.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final item = controller.barang[index];
-
-                            return CustomCard(
-                              profileImage: 'assets/buGiva.jpg',
-                              title: 'Giva Andriana Mutiara',
-                              subtitle: 'Dosen Telkom University',
-                              description: item.description,
-                              image: item.image,
-                              dataBarang: item,
-                            );
-                          },
-                        )),
-                controller.hasError.value
-                    ? Center(
-                        child: Text(controller.errorMessage.value),
-                      )
-                    : Obx(() => ListView.builder(
-                          itemCount: controller.barang.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final item = controller.barang[index];
-
-                            return CustomCard(
-                              profileImage: 'assets/ichlasul.png',
-                              title: 'Ichlasul Amal Pangestu',
-                              subtitle: 'Backend Developer',
-                              description: item.description!,
-                              image: item.image,
-                              dataBarang: item,
-                            );
-                          },
-                        )),
-                controller.hasError.value
-                    ? Center(
-                        child: Text(controller.errorMessage.value),
-                      )
-                    : Obx(() => ListView.builder(
-                          itemCount: controller.barang.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final item = controller.barang[index];
-
-                            return CustomCard(
-                              profileImage: 'assets/bauz.jpg',
-                              title: 'Bauz Dinanta',
-                              subtitle: 'STAS-RC CO-Founder',
-                              description: item.description!,
-                              image: item.image,
-                              dataBarang: item,
-                            );
-                          },
-                        )),
+                _buildListView(
+                  controller.womenBarang,
+                  'assets/buGiva.jpg',
+                  'Giva Andriana Mutiara',
+                  'Dosen Telkom University',
+                ),
+                _buildListView(
+                  controller.menBarang,
+                  'assets/ichlasul.png',
+                  'Ichlasul Amal Pangestu',
+                  'Dragon Layer',
+                ),
+                _buildListView(
+                  controller.accessoryBarang,
+                  'assets/bauz.jpg',
+                  'Bauz Dinanta',
+                  'True Genius',
+                ),
               ],
             )));
+  }
+
+  Widget _buildListView(
+    RxList<BarangModel> barangList,
+    String profilImage,
+    String title,
+    String subtitle,
+  ) {
+    return controller.hasError.value
+        ? Center(
+            child: Text(controller.errorMessage.value),
+          )
+        : Obx(() => ListView.builder(
+              itemCount: barangList.length,
+              itemBuilder: (BuildContext context, int index) {
+                final item = barangList[index];
+
+                return CustomCard(
+                  profileImage: profilImage,
+                  title: title,
+                  subtitle: subtitle,
+                  description: item.description,
+                  image: item.image,
+                  dataBarang: item,
+                );
+              },
+            ));
   }
 }

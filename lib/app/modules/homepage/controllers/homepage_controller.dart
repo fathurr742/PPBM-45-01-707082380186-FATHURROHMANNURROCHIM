@@ -13,7 +13,9 @@ import '../../../data/barang_model.dart';
 
 class HomepageController extends GetxController
     with SingleGetTickerProviderMixin {
-  final barang = <BarangModel>[].obs;
+  final menBarang = <BarangModel>[].obs;
+  final womenBarang = <BarangModel>[].obs;
+  final accessoryBarang = <BarangModel>[].obs;
   final isLoading = false.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
@@ -25,15 +27,19 @@ class HomepageController extends GetxController
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<List<BarangModel>> _fetchApiData() async {
+  Future<void> _fetchApiData(
+      String category, RxList<BarangModel> barangList) async {
     final dio = Dio();
-    final response = await dio.get('https://fakestoreapi.com/products?limit=5');
+    final response =
+        await dio.get('https://fakestoreapi.com/products/category/$category');
     final apiData = (response.data as List).map((item) {
       return BarangModel(
         image: item['image'],
         namaBarang: item['title'],
         description: item['description'],
         price: item['price'].toInt(),
+        category: item['category'],
+        ratingCount: item['rating']['count'],
       );
     }).toList();
 
@@ -51,11 +57,13 @@ class HomepageController extends GetxController
           'description': item.description,
           'price': item.price,
           'image': item.image,
+          'category': item.category,
+          'rating_count': item.ratingCount,
         });
       }
     }
 
-    return apiData;
+    barangList.assignAll(apiData);
   }
 
   void _fetchData() {
@@ -63,9 +71,7 @@ class HomepageController extends GetxController
         .collection('tb_barang')
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .listen((snapshot) async {
-      final apiData = await _fetchApiData();
-
+        .listen((snapshot) {
       final firestoreData = snapshot.docs.map((doc) {
         final data = doc.data();
         final namaBarang =
@@ -75,17 +81,23 @@ class HomepageController extends GetxController
         final price = data['price'] != null ? data['price'] as int : null;
         final imageBase64 =
             data['image'] != null ? data['image'] as String : null;
+        final category =
+            data['category'] != null ? data['category'] as String : null;
 
         return BarangModel(
             image: imageBase64,
             namaBarang: namaBarang,
             description: description,
-            price: price);
+            price: price,
+            category: category);
       }).toList();
 
-      final combinedData = [...apiData, ...firestoreData];
-
-      barang.assignAll(combinedData);
+      menBarang.assignAll(
+          firestoreData.where((item) => item.category == "men's clothing"));
+      womenBarang.assignAll(
+          firestoreData.where((item) => item.category == "women's clothing"));
+      accessoryBarang.assignAll(
+          firestoreData.where((item) => item.category == "jewelery"));
       isLoading.value = false;
     });
   }
@@ -114,6 +126,9 @@ class HomepageController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    _fetchApiData("men's clothing", menBarang);
+    _fetchApiData("women's clothing", womenBarang);
+    _fetchApiData("jewelery", accessoryBarang);
     _fetchData();
     tabController = TabController(length: 3, vsync: this);
     pageController = PageController();
