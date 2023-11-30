@@ -6,33 +6,74 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:dio/dio.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../data/barang_model.dart';
 
 class HomepageController extends GetxController
     with SingleGetTickerProviderMixin {
-  final barang = <BarangModel>[].obs;
+  final menBarang = <BarangModel>[].obs;
+  final womenBarang = <BarangModel>[].obs;
+  final accessoryBarang = <BarangModel>[].obs;
   final isLoading = false.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
   late TabController tabController;
   late PageController pageController;
-  Timer? timer;
 
   GlobalKey bottomNavigationKey = GlobalKey();
   RxInt selectedIndex = 0.obs;
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> _fetchData() async {
-    try {
-      final result = await firestore.collection('tb_barang').get();
+  Future<void> _fetchApiData(
+      String category, RxList<BarangModel> barangList) async {
+    final dio = Dio();
+    final response =
+        await dio.get('https://fakestoreapi.com/products/category/$category');
+    final apiData = (response.data as List).map((item) {
+      return BarangModel(
+        image: item['image'],
+        namaBarang: item['title'],
+        description: item['description'],
+        price: item['price'].toInt(),
+        category: item['category'],
+        ratingCount: item['rating']['count'],
+      );
+    }).toList();
 
-      final hasilFetch = result.docs.map((doc) {
+    for (var item in apiData) {
+      var namaBarang = item.namaBarang;
+
+      // Check if the document exists in Firestore
+      var docSnapshot =
+          await firestore.collection('tb_barang').doc(namaBarang).get();
+
+      if (!docSnapshot.exists) {
+        // If the document doesn't exist, add it to Firestore
+        await firestore.collection('tb_barang').doc(namaBarang).set({
+          'nama_barang': item.namaBarang,
+          'description': item.description,
+          'price': item.price,
+          'image': item.image,
+          'category': item.category,
+          'rating_count': item.ratingCount,
+        });
+      }
+    }
+
+    barangList.assignAll(apiData);
+  }
+
+  void _fetchData() {
+    firestore
+        .collection('tb_barang')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      final firestoreData = snapshot.docs.map((doc) {
         final data = doc.data();
-        final id = data['id'] != null ? data['id'] as int : null;
         final namaBarang =
             data['nama_barang'] != null ? data['nama_barang'] as String : null;
         final description =
@@ -40,21 +81,25 @@ class HomepageController extends GetxController
         final price = data['price'] != null ? data['price'] as int : null;
         final imageBase64 =
             data['image'] != null ? data['image'] as String : null;
+        final category =
+            data['category'] != null ? data['category'] as String : null;
 
         return BarangModel(
-            id: id,
-            imageBase64: imageBase64,
+            image: imageBase64,
             namaBarang: namaBarang,
             description: description,
-            price: price);
+            price: price,
+            category: category);
       }).toList();
 
-      barang.assignAll(hasilFetch);
+      menBarang.assignAll(
+          firestoreData.where((item) => item.category == "men's clothing"));
+      womenBarang.assignAll(
+          firestoreData.where((item) => item.category == "women's clothing"));
+      accessoryBarang.assignAll(
+          firestoreData.where((item) => item.category == "jewelery"));
       isLoading.value = false;
-    } catch (e) {
-      hasError.value = true;
-      errorMessage.value = e.toString();
-    }
+    });
   }
 
   void onItemTapped(int index) {
@@ -81,19 +126,19 @@ class HomepageController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    _fetchApiData("men's clothing", menBarang);
+    _fetchApiData("women's clothing", womenBarang);
+    _fetchApiData("jewelery", accessoryBarang);
     _fetchData();
     tabController = TabController(length: 3, vsync: this);
     pageController = PageController();
-
-    timer =
-        Timer.periodic(const Duration(seconds: 5), (Timer t) => _fetchData());
   }
 
   @override
   void onClose() {
     tabController.dispose();
     pageController.dispose();
-    timer?.cancel(); // Cancel the timer
+
     super.onClose();
   }
 }

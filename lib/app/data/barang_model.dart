@@ -1,14 +1,17 @@
 class BarangModel {
-  final int? id;
-  final String? imageBase64;
+  final dynamic image;
   final String? namaBarang;
   final String? description;
   final int? price;
+  final String? category;
+  final int? ratingCount;
 
-  BarangModel(
-      {required this.id,
-      required this.imageBase64,
-      required this.namaBarang,
-      required this.description,
-      required this.price});
+  BarangModel({
+    required this.image,
+    required this.namaBarang,
+    required this.description,
+    required this.price,
+    this.category,
+    this.ratingCount,
+  });
 }

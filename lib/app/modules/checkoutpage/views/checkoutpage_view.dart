@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:e_commerce/app/helper/custom_appbar.dart';
-import 'package:e_commerce/app/helper/quantityinput.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -110,8 +109,7 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
             ),
           ],
         ),
-        SizedBox(
-            width: Get.width, height: Get.height * 0.5, child: produktile()),
+        produktile(),
         const SizedBox(
           height: 20,
         ),
@@ -131,6 +129,45 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
           ],
         ),
         pembayaran(),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: <Widget>[
+            Icon(MdiIcons.shopping, color: Colors.black, size: 18),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(
+              'Rincian Pembayaran',
+              style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black),
+            ),
+          ],
+        ),
+        checkout(),
+        Container(
+            width: Get.width,
+            height: 50,
+            margin: const EdgeInsets.symmetric(vertical: 20),
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pink,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                'Bayar Sekarang',
+                style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            )),
       ],
     );
   }
@@ -226,15 +263,26 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
   }
 
   Widget produktile() {
+    bool isValidBase64(String base64String) {
+      try {
+        base64Decode(base64String);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
     return Obx(() => ListView.builder(
+          shrinkWrap: true, // Add this line
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: controller.items.length,
           itemBuilder: (context, int index) {
             final item = controller.items[index];
-            Uint8List bytes = base64.decode(item.image64!);
+
             return Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
-              padding: const EdgeInsets.all(15),
-              height: 190,
+              padding: const EdgeInsets.all(10),
+              height: 220,
               width: Get.width,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -274,7 +322,31 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                         ],
                       ),
                       IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.close))
+                          onPressed: () {
+                            Get.dialog(
+                              AlertDialog(
+                                title: const Text('Hapus Item'),
+                                content: const Text(
+                                    'Apakah anda yakin ingin menghapus item ini?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      controller.deleteItem(item.id!);
+                                      Get.back();
+                                    },
+                                    child: const Text('Hapus'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    child: const Text('Batal'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.close))
                     ],
                   ),
                   const SizedBox(
@@ -287,102 +359,119 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 70,
-                              width: 70,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: MemoryImage(bytes),
-                                  fit: BoxFit.cover,
-                                ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Expanded(
+                          child: Row(
+                            children: [
+                              item.image64 is String &&
+                                      isValidBase64(item.image64!)
+                                  ? Image.memory(
+                                      width: 50,
+                                      height: 100,
+                                      base64Decode(item.image64!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : item.image64 is String
+                                      ? Image.network(
+                                          width: 50,
+                                          height: 100,
+                                          item.image64!,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Icon(MdiIcons
+                                          .pictureInPictureTopRightOutline),
+                              const SizedBox(
+                                width: 15,
                               ),
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  item.namaBarang!,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  item.color!,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  children: [
-                                    Text('W: ${item.waist!}',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                        )),
-                                    const SizedBox(
-                                      width: 10,
+                              SizedBox(
+                                width: 140,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      item.namaBarang!,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                    Text('L: ${item.length!}',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                        )),
                                     const SizedBox(
-                                      width: 10,
+                                      height: 5,
                                     ),
-                                    Text('B: ${item.breadth!}',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                        )),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Obx(() => Text(
-                                      formatCurrency.format(item.totalHarga! *
-                                          item.quantity!.value),
+                                    Text(
+                                      item.color!,
                                       style: GoogleFonts.poppins(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
-                                        color: Colors.pink,
                                       ),
-                                    )),
-                              ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text('W: ${item.waist!}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                            )),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text('L: ${item.length!}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                            )),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text('B: ${item.breadth!}',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                            )),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Obx(() => Text(
+                                          formatCurrency.format(
+                                              item.totalHarga! *
+                                                  item.quantity!.value),
+                                          style: GoogleFonts.poppins(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.pink,
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            IconButton(
+                              iconSize: 20,
+                              icon: const Icon(Icons.remove),
+                              onPressed: () =>
+                                  controller.decreaseQuantity(item),
+                            ),
+                            Obx(() => Text(
+                                '${item.quantity!.value}')), // wrap with Obx
+                            IconButton(
+                              iconSize: 20,
+                              icon: const Icon(Icons.add),
+                              onPressed: () =>
+                                  controller.increaseQuantity(item),
                             ),
                           ],
                         ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () => controller.decreaseQuantity(item),
-                          ),
-                          Obx(() =>
-                              Text('${item.quantity!.value}')), // wrap with Obx
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () => controller.increaseQuantity(item),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -393,7 +482,7 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
 
   Widget pembayaran() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       width: Get.width,
       height: 272,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -421,7 +510,7 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                           color: Colors.black,
                           size: 18,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
                         Text(method.toString().split('.').last,
@@ -439,12 +528,142 @@ class CheckoutpageView extends GetView<CheckoutpageController> {
                     controlAffinity: ListTileControlAffinity
                         .trailing, // aligns the radio button to the right
                   )),
-              Divider(
+              const Divider(
                 height: 2,
               ),
             ],
           );
         }).toList(),
+      ),
+    );
+  }
+
+  Widget checkout() {
+    int biayaPelayanan = 1000;
+    int ongkir = 10000;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15),
+      width: Get.width,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 0.5,
+              blurRadius: 7,
+              offset: const Offset(0, 3),
+            ),
+          ]),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Subtotal Harga untuk Produk',
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                    Obx(() => Text(
+                          formatCurrency.format(controller.calculatesubTotal()),
+                          style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
+                        )),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Ongkos Kirim',
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                    Text(
+                      formatCurrency.format(ongkir),
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Biaya Pelayanan',
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                    Text(
+                      formatCurrency.format(biayaPelayanan),
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const Divider(
+            height: 2,
+          ),
+          Container(
+            height: 64,
+            padding: const EdgeInsets.all(15),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+              color: Colors.pink,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total Pembayaran',
+                  style: GoogleFonts.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
+                ),
+                Obx(() => Text(
+                      formatCurrency.format(controller.calculatesubTotal() +
+                          ongkir +
+                          biayaPelayanan),
+                      style: GoogleFonts.poppins(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    )),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

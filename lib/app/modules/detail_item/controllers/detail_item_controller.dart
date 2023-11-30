@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,6 +62,7 @@ class DetailItemController extends GetxController
                 Get.back(closeOverlays: true);
 
                 await firestore.collection('tb_order').add({
+                  'createdAt': FieldValue.serverTimestamp(),
                   'nama_barang': namaBarang,
                   'waist': waistValue,
                   'length': lengthValue,
