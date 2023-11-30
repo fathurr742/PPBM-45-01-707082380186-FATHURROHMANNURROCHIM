@@ -16,29 +16,29 @@ class AddItemView extends GetView<AddItemController> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: const CustomAppBar(heigh: 0, title: 'Add Item'),
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.8,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.pink,
-                Colors.pink.shade400,
-                Colors.yellow,
-              ],
-            ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.pink,
+              Colors.pink.shade400,
+              Colors.yellow,
+            ],
           ),
-          padding: const EdgeInsets.all(20),
-          child: Obx(
-            () => Column(
+        ),
+        padding: const EdgeInsets.all(10),
+        child: Obx(
+          () => SingleChildScrollView(
+            child: Column(
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
-                  height: 130, // Add this line
-                  width: 130, // Add this line
+                  height: 100, // Add this line
+                  width: 100, // Add this line
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: controller.image.value != null
@@ -116,6 +116,39 @@ class AddItemView extends GetView<AddItemController> {
                             },
                             decoration: InputDecoration(
                               hintText: 'Enter Description',
+                              helperStyle: GoogleFonts.raleway(),
+                              filled: true,
+                              fillColor: Colors.grey.shade200,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          DropdownButtonFormField<String>(
+                            value: controller.selectedCategory.value,
+                            items: controller.categories.map((String category) {
+                              return DropdownMenuItem<String>(
+                                value: category,
+                                child: Text(category),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              if (newValue != null) {
+                                controller.selectedCategory.value = newValue;
+                              }
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select a category';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Select Category',
                               helperStyle: GoogleFonts.raleway(),
                               filled: true,
                               fillColor: Colors.grey.shade200,

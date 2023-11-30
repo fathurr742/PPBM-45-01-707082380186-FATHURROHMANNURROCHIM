@@ -48,13 +48,13 @@ class _MySettingPageState extends State<MySettingPage> {
                 radius: 50,
                 child: CircleAvatar(
                   radius: 45,
-                  backgroundImage: AssetImage('assets/ichlasul.png'),
+                  backgroundImage: AssetImage('assets/fathur.png'),
                 )),
             const SizedBox(
               height: 10,
             ),
             Text(
-              'Ichlasul \nAmal Pangetsu',
+              'Fathurrohman \nNurRochim',
               style: GoogleFonts.raleway(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

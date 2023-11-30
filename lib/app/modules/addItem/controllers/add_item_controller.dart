@@ -11,8 +11,11 @@ class AddItemController extends GetxController {
   late TextEditingController titleController;
   late TextEditingController descriptionController;
   late TextEditingController priceController;
+
   Rxn<File> image = Rxn<File>();
   String? base64Image;
+  final categories = ["women's clothing", "men clothing", "accessory"].obs;
+  final selectedCategory = "women's clothing".obs;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> pickImage() async {
@@ -46,12 +49,13 @@ class AddItemController extends GetxController {
     final price = int.parse(priceController.text);
 
     try {
-      await firestore.collection('tb_barang').add({
+      await firestore.collection('tb_barang').doc(namaBarang).set({
         'createdAt': FieldValue.serverTimestamp(),
         'nama_barang': namaBarang,
         'description': description,
         'price': price,
         'image': base64Image,
+        'category': selectedCategory.value,
       });
 
       Get.snackbar(

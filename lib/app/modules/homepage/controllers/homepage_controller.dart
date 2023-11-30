@@ -1,10 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -32,16 +34,33 @@ class HomepageController extends GetxController
     final dio = Dio();
     final response =
         await dio.get('https://fakestoreapi.com/products/category/$category');
-    final apiData = (response.data as List).map((item) {
+
+    final apiData = await Future.wait((response.data as List).map((item) async {
+      // Fetch the image data from the URL using Dio
+      final responseImage = await dio.get(item['image'],
+          options: Options(responseType: ResponseType.bytes));
+      final imageData = responseImage.data;
+
+      // Compress the image data
+      final compressedImageData = await FlutterImageCompress.compressWithList(
+        imageData,
+        minWidth: 500,
+        minHeight: 300,
+        quality: 85,
+      );
+
+      // Convert the compressed image data to a base64 string
+      final imageBase64 = base64Encode(compressedImageData);
+
       return BarangModel(
-        image: item['image'],
+        image: imageBase64,
         namaBarang: item['title'],
         description: item['description'],
         price: item['price'].toInt(),
         category: item['category'],
         ratingCount: item['rating']['count'],
       );
-    }).toList();
+    }).toList());
 
     for (var item in apiData) {
       var namaBarang = item.namaBarang;
@@ -59,14 +78,15 @@ class HomepageController extends GetxController
           'image': item.image,
           'category': item.category,
           'rating_count': item.ratingCount,
+          'createdAt': FieldValue.serverTimestamp(),
         });
       }
     }
-
-    barangList.assignAll(apiData);
   }
 
   void _fetchData() {
+    isLoading.value = true; // Set isLoading to true at the start
+
     firestore
         .collection('tb_barang')
         .orderBy('createdAt', descending: true)
@@ -98,7 +118,9 @@ class HomepageController extends GetxController
           firestoreData.where((item) => item.category == "women's clothing"));
       accessoryBarang.assignAll(
           firestoreData.where((item) => item.category == "jewelery"));
-      isLoading.value = false;
+
+      isLoading.value =
+          false; // Set isLoading to false once the data has been fetched
     });
   }
 
