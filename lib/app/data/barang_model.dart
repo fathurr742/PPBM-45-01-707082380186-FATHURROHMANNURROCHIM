@@ -7,7 +7,7 @@ class BarangModel {
   final int? ratingCount;
 
   BarangModel({
-    required this.image,
+    this.image,
     required this.namaBarang,
     required this.description,
     required this.price,

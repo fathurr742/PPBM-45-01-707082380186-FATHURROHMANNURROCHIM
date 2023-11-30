@@ -26,8 +26,9 @@ furryshopping.com.e_commerce.app-mergeDebugResources-24 D:\Project Magang\e_comm
 furryshopping.com.e_commerce.app-merged_res-25 D:\Project Magang\e_commerce\build\app\intermediates\merged_res\debug
 furryshopping.com.e_commerce.app-packaged_res-26 D:\Project Magang\e_commerce\build\cloud_firestore\intermediates\packaged_res\debug
 furryshopping.com.e_commerce.app-packaged_res-27 D:\Project Magang\e_commerce\build\firebase_core\intermediates\packaged_res\debug
-furryshopping.com.e_commerce.app-packaged_res-28 D:\Project Magang\e_commerce\build\flutter_keyboard_visibility\intermediates\packaged_res\debug
-furryshopping.com.e_commerce.app-packaged_res-29 D:\Project Magang\e_commerce\build\flutter_plugin_android_lifecycle\intermediates\packaged_res\debug
-furryshopping.com.e_commerce.app-packaged_res-30 D:\Project Magang\e_commerce\build\image_picker_android\intermediates\packaged_res\debug
-furryshopping.com.e_commerce.app-packaged_res-31 D:\Project Magang\e_commerce\build\path_provider_android\intermediates\packaged_res\debug
-furryshopping.com.e_commerce.app-packaged_res-32 D:\Project Magang\e_commerce\build\permission_handler_android\intermediates\packaged_res\debug
+furryshopping.com.e_commerce.app-packaged_res-28 D:\Project Magang\e_commerce\build\flutter_image_compress_common\intermediates\packaged_res\debug
+furryshopping.com.e_commerce.app-packaged_res-29 D:\Project Magang\e_commerce\build\flutter_keyboard_visibility\intermediates\packaged_res\debug
+furryshopping.com.e_commerce.app-packaged_res-30 D:\Project Magang\e_commerce\build\flutter_plugin_android_lifecycle\intermediates\packaged_res\debug
+furryshopping.com.e_commerce.app-packaged_res-31 D:\Project Magang\e_commerce\build\image_picker_android\intermediates\packaged_res\debug
+furryshopping.com.e_commerce.app-packaged_res-32 D:\Project Magang\e_commerce\build\path_provider_android\intermediates\packaged_res\debug
+furryshopping.com.e_commerce.app-packaged_res-33 D:\Project Magang\e_commerce\build\permission_handler_android\intermediates\packaged_res\debug
