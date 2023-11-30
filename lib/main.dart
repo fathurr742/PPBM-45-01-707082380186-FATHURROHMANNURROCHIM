@@ -1,5 +1,4 @@
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
-import 'package:e_commerce/app/modules/homepage/views/homepage_view.dart';
 import 'package:e_commerce/app/modules/introduction/views/introduction_view.dart';
 import 'package:e_commerce/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,7 +34,7 @@ Future<void> main() async {
         ),
         duration: const Duration(milliseconds: 1500),
         animationDuration: const Duration(milliseconds: 1000),
-        nextScreen: HomepageView(),
+        nextScreen: const IntroductionView(),
       ),
     ),
   );

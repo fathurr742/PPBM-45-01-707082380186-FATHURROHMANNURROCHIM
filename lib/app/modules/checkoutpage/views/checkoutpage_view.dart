@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:e_commerce/app/helper/custom_appbar.dart';
 import 'package:flutter/material.dart';

@@ -79,7 +79,7 @@ class MyTabView extends GetView<HomepageController> {
     return Obx(() {
       if (controller.isLoading.value) {
         // Show the skeleton card while loading
-        return CustomCardSkeleton();
+        return const CustomCardSkeleton();
       } else if (controller.hasError.value) {
         return Center(
           child: Text(controller.errorMessage.value),

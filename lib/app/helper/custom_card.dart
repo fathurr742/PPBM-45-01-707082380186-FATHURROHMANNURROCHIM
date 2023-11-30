@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:e_commerce/app/data/barang_model.dart';
 import 'package:e_commerce/app/modules/detail_item/views/detail_item_view.dart';
@@ -17,7 +16,7 @@ class CustomCard extends StatelessWidget {
     try {
       base64Decode(base64String);
       return true;
-    } catch (FormatException) {
+    } on FormatException {
       return false;
     }
   }
