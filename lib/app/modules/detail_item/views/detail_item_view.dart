@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../controllers/detail_item_controller.dart';
 
@@ -37,7 +38,7 @@ class DetailItemView extends GetView<DetailItemController> {
         actionbar: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.heart_broken_outlined, color: Colors.black),
+            icon: Icon(MdiIcons.heart, color: Colors.black),
           ),
           IconButton(
             onPressed: () {},

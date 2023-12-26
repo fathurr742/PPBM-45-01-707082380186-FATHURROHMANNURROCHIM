@@ -46,7 +46,7 @@ class HomepageController extends GetxController
         imageData,
         minWidth: 500,
         minHeight: 300,
-        quality: 85,
+        quality: 50,
       );
 
       // Convert the compressed image data to a base64 string
@@ -84,10 +84,12 @@ class HomepageController extends GetxController
     }
   }
 
+  late StreamSubscription<QuerySnapshot> _subscription;
+
   void _fetchData() {
     isLoading.value = true; // Set isLoading to true at the start
 
-    firestore
+    _subscription = firestore
         .collection('tb_barang')
         .orderBy('createdAt', descending: true)
         .snapshots()
@@ -160,6 +162,8 @@ class HomepageController extends GetxController
   void onClose() {
     tabController.dispose();
     pageController.dispose();
+    _subscription
+        .cancel(); // Cancel the subscription when it's no longer needed
 
     super.onClose();
   }
