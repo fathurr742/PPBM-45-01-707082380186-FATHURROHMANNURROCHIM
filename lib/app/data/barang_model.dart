@@ -4,14 +4,15 @@ class BarangModel {
   final String? description;
   final int? price;
   final String? category;
-  final int? ratingCount;
+  final String? documentId;
+  final double? rating;
 
-  BarangModel({
-    this.image,
-    required this.namaBarang,
-    required this.description,
-    required this.price,
-    this.category,
-    this.ratingCount,
-  });
+  BarangModel(
+      {this.image,
+      required this.namaBarang,
+      required this.description,
+      required this.price,
+      this.category,
+      this.documentId,
+      this.rating});
 }

@@ -14,7 +14,7 @@ class AddItemController extends GetxController {
 
   Rxn<File> image = Rxn<File>();
   String? base64Image;
-  final categories = ["women's clothing", "men clothing", "accessory"].obs;
+  final categories = ["women's clothing", "men's clothing", "accessory"].obs;
   final selectedCategory = "women's clothing".obs;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -25,7 +25,9 @@ class AddItemController extends GetxController {
       // Compress the image
       final result = await FlutterImageCompress.compressWithFile(
         pickedFile.path,
-        quality: 94,
+        minWidth: 200,
+        minHeight: 200,
+        quality: 20,
       );
 
       // Convert the compressed image to base64

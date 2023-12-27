@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:e_commerce/app/data/barang_model.dart';
 import 'package:e_commerce/app/helper/colordropdown.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../controllers/detail_item_controller.dart';
 
@@ -36,8 +39,57 @@ class DetailItemView extends GetView<DetailItemController> {
         title: '',
         actionbar: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.heart_broken_outlined, color: Colors.black),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Colors.pink,
+                  title: Text(
+                    'Rate this item',
+                    style: GoogleFonts.raleway(color: Colors.white),
+                  ),
+                  content: RatingBar.builder(
+                    initialRating: 3,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {
+                      FirebaseFirestore.instance
+                          .collection('ratings')
+                          .doc(dataBarang.documentId)
+                          .set({
+                        'rating': rating,
+                      });
+                    },
+                  ),
+                  actions: <Widget>[
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        'OK',
+                        style: GoogleFonts.raleway(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+            icon: Icon(MdiIcons.star, color: Colors.black),
           ),
           IconButton(
             onPressed: () {},

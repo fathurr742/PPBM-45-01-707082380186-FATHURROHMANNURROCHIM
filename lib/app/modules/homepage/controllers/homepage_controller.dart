@@ -46,7 +46,7 @@ class HomepageController extends GetxController
         imageData,
         minWidth: 500,
         minHeight: 300,
-        quality: 85,
+        quality: 50,
       );
 
       // Convert the compressed image data to a base64 string
@@ -58,7 +58,6 @@ class HomepageController extends GetxController
         description: item['description'],
         price: item['price'].toInt(),
         category: item['category'],
-        ratingCount: item['rating']['count'],
       );
     }).toList());
 
@@ -77,23 +76,25 @@ class HomepageController extends GetxController
           'price': item.price,
           'image': item.image,
           'category': item.category,
-          'rating_count': item.ratingCount,
           'createdAt': FieldValue.serverTimestamp(),
         });
       }
     }
   }
 
+  late StreamSubscription<QuerySnapshot> _subscription;
+
   void _fetchData() {
     isLoading.value = true; // Set isLoading to true at the start
 
-    firestore
+    _subscription = firestore
         .collection('tb_barang')
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .listen((snapshot) {
-      final firestoreData = snapshot.docs.map((doc) {
+        .listen((snapshot) async {
+      final firestoreData = await Future.wait(snapshot.docs.map((doc) async {
         final data = doc.data();
+        final documentId = doc.id;
         final namaBarang =
             data['nama_barang'] != null ? data['nama_barang'] as String : null;
         final description =
@@ -104,13 +105,21 @@ class HomepageController extends GetxController
         final category =
             data['category'] != null ? data['category'] as String : null;
 
+        // Fetch the rating from Firestore
+        final ratingDoc =
+            await firestore.collection('ratings').doc(documentId).get();
+        final rating =
+            ratingDoc.exists ? ratingDoc.data()!['rating'] as double : null;
+
         return BarangModel(
+            documentId: documentId,
             image: imageBase64,
             namaBarang: namaBarang,
             description: description,
             price: price,
-            category: category);
-      }).toList();
+            category: category,
+            rating: rating);
+      }).toList());
 
       menBarang.assignAll(
           firestoreData.where((item) => item.category == "men's clothing"));
@@ -160,6 +169,8 @@ class HomepageController extends GetxController
   void onClose() {
     tabController.dispose();
     pageController.dispose();
+    _subscription
+        .cancel(); // Cancel the subscription when it's no longer needed
 
     super.onClose();
   }

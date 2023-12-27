@@ -5,6 +5,7 @@ import 'package:e_commerce/app/modules/detail_item/views/detail_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // ignore: must_be_immutable
 class CustomCard extends StatelessWidget {
@@ -93,16 +94,14 @@ class CustomCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.heart_broken,
-                            color: Colors.red,
-                          )),
+                      Icon(MdiIcons.star, color: Colors.pink, size: 25),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       Text(
-                        '99K',
+                        dataBarang.rating?.toString() ?? '0',
                         style: GoogleFonts.aBeeZee(
-                            fontSize: 12,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey),
                       )
