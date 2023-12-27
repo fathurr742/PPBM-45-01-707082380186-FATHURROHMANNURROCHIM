@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "372415309360",
+    "project_id": "makelartahu",
+    "storage_bucket": "makelartahu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372415309360:android:2b7051efff7cd2d1382ff5",
+        "android_client_info": {
+          "package_name": "furryshopping.com.e_commerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCX_-gScFr3vyAw-unvTs03nrC_stJZlM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
