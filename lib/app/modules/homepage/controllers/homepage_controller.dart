@@ -58,7 +58,6 @@ class HomepageController extends GetxController
         description: item['description'],
         price: item['price'].toInt(),
         category: item['category'],
-        ratingCount: item['rating']['count'],
       );
     }).toList());
 
@@ -77,7 +76,6 @@ class HomepageController extends GetxController
           'price': item.price,
           'image': item.image,
           'category': item.category,
-          'rating_count': item.ratingCount,
           'createdAt': FieldValue.serverTimestamp(),
         });
       }
@@ -93,9 +91,10 @@ class HomepageController extends GetxController
         .collection('tb_barang')
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .listen((snapshot) {
-      final firestoreData = snapshot.docs.map((doc) {
+        .listen((snapshot) async {
+      final firestoreData = await Future.wait(snapshot.docs.map((doc) async {
         final data = doc.data();
+        final documentId = doc.id;
         final namaBarang =
             data['nama_barang'] != null ? data['nama_barang'] as String : null;
         final description =
@@ -106,13 +105,21 @@ class HomepageController extends GetxController
         final category =
             data['category'] != null ? data['category'] as String : null;
 
+        // Fetch the rating from Firestore
+        final ratingDoc =
+            await firestore.collection('ratings').doc(documentId).get();
+        final rating =
+            ratingDoc.exists ? ratingDoc.data()!['rating'] as double : null;
+
         return BarangModel(
+            documentId: documentId,
             image: imageBase64,
             namaBarang: namaBarang,
             description: description,
             price: price,
-            category: category);
-      }).toList();
+            category: category,
+            rating: rating);
+      }).toList());
 
       menBarang.assignAll(
           firestoreData.where((item) => item.category == "men's clothing"));

@@ -94,12 +94,12 @@ class CustomCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(MdiIcons.heartOutline, color: Colors.grey, size: 20),
+                      Icon(MdiIcons.star, color: Colors.pink, size: 25),
                       const SizedBox(
                         width: 10,
                       ),
                       Text(
-                        '99K',
+                        dataBarang.rating?.toString() ?? '0',
                         style: GoogleFonts.aBeeZee(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
